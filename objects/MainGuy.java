@@ -1,6 +1,6 @@
-package net.ocps.tchs.MDGame.objects;
+package com.matthewgarrison.objects;
 
-import net.ocps.tchs.MDGame.tools.TextureManager;
+import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -9,199 +9,196 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class MainGuy {
-	public Rectangle hitBox;
-	public Sprite sprite;
+	private Rectangle hitBox;
+	private Sprite sprite;
 
-	public int speed; //how fast he moves left-right
-	public int gravitySpeed; //how strong gravity is
+	private int speed, gravitySpeed;
+	private float velocityY;
+	private boolean inAir;
 
-	public float VelocityY; //veritcal velocity
-	public boolean inAir; //is he in the air?
+	private boolean facingLeft;
+	private float timeSinceMovedLeft, timeSinceMovedRight;
+	private int animationCounter, dominantDirection;
+	private final int DD_NOTSET = 0, DD_LEFT = 1, DD_RIGHT = 2;
 
-	public boolean facingLeft;
-	public int animation; //used to create the walking animation
-	public float timeSinceMovedLeft;
-	public float timeSinceMovedRight;
-	public int dominantDirection; //0 = not set, 1 = left, 2 = right
+	private int jumpPower;
+	private int boost;
 
-	public int jumpPower; //the displayed value
-	public int boost; //how much jump is boosted by
+	private static int standingHitboxHeight, crouchingHitboxHeight, width;
 
-	public static int standingHitbox; //how tall he is while standing
-	public static int crouchingHitbox; //while crouching
-	public static int width; //how wide he is
-
-	//initializes
 	public MainGuy(int x, int y) {
-		hitBox = new Rectangle(x, y, width, 77); //the hitbox
-		sprite = new Sprite(TextureManager.mainGuy_texture1Right); //the image
+		hitBox = new Rectangle(x, y, width, 77);
+		sprite = new Sprite(TextureManager.mainGuy_texture1Right);
 		setPosition(x, y);
 
 		speed = 200;
 		gravitySpeed = 25;
-		VelocityY = 0;
+		velocityY = 0;
 		inAir = false;
 		facingLeft = false;
-		animation = 0;
+		animationCounter = 0;
 		jumpPower = 100;
 		boost = 0;
 
 		timeSinceMovedLeft = 0;
 		timeSinceMovedRight = 0;
-		dominantDirection = 0;
+		dominantDirection = DD_NOTSET;
 	}
 
-	//collisions
-	public int hits(Rectangle r) {
-		if(hitBox.overlaps(r)) {
-			return 1;
-		}
-		return -1;
-	}
-
-	//used to perform several different actions
-	public void landOnGround(float x, float y){
-		hitBox.height = standingHitbox; //how tall he normally is
+	public void landOnGround(float y){
+		hitBox.height = standingHitboxHeight;
 		setPosition(hitBox.x, y);
-		VelocityY = 0; //zeroes the y velocity
-		inAir = false; //allows you to jump again
+		velocityY = 0;
+		inAir = false;
 
-		//turns the sprite the right way
-		if(facingLeft == true){
+		if (facingLeft) {
 			sprite.setTexture(TextureManager.mainGuy_texture3Left);
-		}
-		else if(facingLeft == false){
+		} else {
 			sprite.setTexture(TextureManager.mainGuy_texture3Right);
 		}
+	}
+
+	public void moveLeft(float delta) {
+		timeSinceMovedLeft = 0;
+		setPosition(hitBox.x - speed*delta, hitBox.y);
+
+		// Cycles through 3 animations; if MainGuy's in air, it will turn the sprite the correct way.
+		facingLeft = true;
+		if (inAir) {
+			sprite.setTexture(TextureManager.mainGuy_textureJumpLeft);
+		} else {
+			animationCounter++;
+			if (animationCounter == 0) {
+				sprite.setTexture(TextureManager.mainGuy_texture1Left);
+			} else if (animationCounter == 5) {
+				sprite.setTexture(TextureManager.mainGuy_texture2Left);
+			} else if (animationCounter == 10) {
+				sprite.setTexture(TextureManager.mainGuy_texture3Left);
+			} else if (animationCounter == 15){
+				animationCounter = 0;
+			}
+		}
+	}
+
+	public void moveRight(float delta) {
+		timeSinceMovedRight = 0;
+		setPosition(hitBox.x + speed*delta, hitBox.y);
+
+		// Cycles through 3 animations; if MainGuy's in air, it will turn the sprite the correct way.
+		facingLeft = false;
+		if (inAir) {
+			sprite.setTexture(TextureManager.mainGuy_textureJumpRight);
+		} else {
+			animationCounter++;
+			if (animationCounter == 0) {
+				sprite.setTexture(TextureManager.mainGuy_texture1Right);
+			} else if (animationCounter == 5) {
+				sprite.setTexture(TextureManager.mainGuy_texture2Right);
+			} else if (animationCounter == 10) {
+				sprite.setTexture(TextureManager.mainGuy_texture3Right);
+			} else if (animationCounter == 15){
+				animationCounter = 0;
+			}
+		}
+	}
+
+	public void jump() {
+		if (!inAir) {
+			inAir = true;
+
+			// The jump boost.
+			if (jumpPower > 100) {
+				jumpPower -= 20;
+			}
+			if (boost > 0) {
+				boost--;
+			}
+
+			velocityY = 10 + boost;
+
+			if (facingLeft) {
+				sprite.setTexture(TextureManager.mainGuy_textureJumpLeft);
+			} else {
+				sprite.setTexture(TextureManager.mainGuy_textureJumpRight);
+			}
+		}
+	}
+
+	public void crouch() {
+		if (!inAir) {
+			if (facingLeft){
+				sprite.setTexture(TextureManager.mainGuy_textureCrouchLeft);
+			} else {
+				sprite.setTexture(TextureManager.mainGuy_textureCrouchRight);
+			}
+			hitBox.height = crouchingHitboxHeight;
+		}
+	}
+
+	public void setPosition(float x, float y){
+		hitBox.setPosition(x, y);
+		sprite.setPosition(x, y);
+	}
+
+	public void update(float delta){
+		velocityY -= (gravitySpeed * delta);
+		hitBox.y += velocityY;
+		sprite.setPosition(hitBox.x, hitBox.y);
+
+		timeSinceMovedLeft += delta;
+		timeSinceMovedRight += delta;
+
+		if ((Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) &&
+				(Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D))) {
+			if (dominantDirection == DD_NOTSET) {
+				if (this.timeSinceMovedLeft > this.timeSinceMovedRight) {
+					dominantDirection = DD_LEFT;
+				} else if (this.timeSinceMovedRight > this.timeSinceMovedLeft) {
+					dominantDirection = DD_RIGHT;
+				}
+			}
+		} else {
+			dominantDirection = DD_NOTSET;
+		}
+	}
+
+	public void draw(SpriteBatch batch){
+		sprite.draw(batch);
+	}
+
+	public static void switchToSheepSkin() {
+		MainGuy.standingHitboxHeight = 56;
+		MainGuy.crouchingHitboxHeight = 44;
+		MainGuy.width = 80;
+	}
+
+	public static void switchToDefaultSkin() {
+		MainGuy.standingHitboxHeight = 77;
+		MainGuy.crouchingHitboxHeight = 65;
+		MainGuy.width = 42;
 	}
 
 	public Rectangle getHitBox() {
 		return hitBox;
 	}
 
-	//moves mainguy left
-	public void moveLeft(float delta) {
-		timeSinceMovedLeft = 0;
-		setPosition(hitBox.x - speed*delta, hitBox.y); //x = x - (speed * time elapsed)
-
-		//animation
-		facingLeft = true;
-		//cycles through 3 animations; if mainGuy's in air, it will turn the sprite the correct way
-		if (inAir == false) {
-			animation++;
-			if (animation < 5) {
-				sprite.setTexture(TextureManager.mainGuy_texture1Left);
-			}
-			if (animation >= 5 && animation < 10) {
-				sprite.setTexture(TextureManager.mainGuy_texture2Left);
-			}
-			if (animation >= 10) {
-				sprite.setTexture(TextureManager.mainGuy_texture3Left);
-				if (animation == 15) {
-					animation = 0;
-				}
-			}
-		} else {
-			sprite.setTexture(TextureManager.mainGuy_textureJumpLeft);
-		}
+	public int getJumpPower() {
+		return this.jumpPower;
 	}
 
-	//moves him right
-	public void moveRight(float delta) {
-		timeSinceMovedRight = 0;
-		setPosition(hitBox.x + speed*delta, hitBox.y); //x = x + (speed * time elapsed)
-
-		//animation
-		facingLeft = false;
-		if (inAir == false) {
-			animation += 1;
-			if(animation < 5) {
-				sprite.setTexture(TextureManager.mainGuy_texture1Right);
-			}
-			if(animation >= 5 && animation < 10) {
-				sprite.setTexture(TextureManager.mainGuy_texture2Right);
-			}
-			if(animation >= 10) {
-				sprite.setTexture(TextureManager.mainGuy_texture3Right);
-				if(animation == 15){
-					animation = 0;
-				}
-			}
-		} else {
-			sprite.setTexture(TextureManager.mainGuy_textureJumpRight);
-		}
+	public void setJumpPower(int jumpPower) {
+		this.jumpPower = jumpPower;
 	}
 
-	//jumps
-	public void Jump() {
-		if (inAir == false) {
-			inAir = true;
-			//the jump boost
-			if (jumpPower > 100) {
-				jumpPower -= 20;
-			}
-			VelocityY = 10 + boost; //adds speed to your y-velocity
-			//subtracts from the boost amount
-			if (boost > 0) {
-				boost--;
-			}
-			//which jump picture to use
-			if(facingLeft == true){
-				sprite.setTexture(TextureManager.mainGuy_textureJumpLeft);
-			}
-			else if(facingLeft == false){
-				sprite.setTexture(TextureManager.mainGuy_textureJumpRight);
-			}
-		}
+	public int getBoost() {
+		return boost;
 	}
 
-	public void Crouch() {
-		if (inAir == false) {
-			//checks for and uses the correctly facing image
-			if(facingLeft == true){
-				sprite.setTexture(TextureManager.mainGuy_textureCrouchLeft);
-			}
-			else if(facingLeft == false){
-				sprite.setTexture(TextureManager.mainGuy_textureCrouchRight);
-			}
-			hitBox.height = crouchingHitbox; //sets the height to the correct, smaller number
-		}
+	public void setBoost(int boost) {
+		this.boost = boost;
 	}
 
-	//sets the new position
-	public void setPosition(float x, float y){
-		hitBox.x = x;
-		hitBox.y = y;
-		sprite.setPosition(x, y);
-	}
-
-	public void update(float delta){
-		VelocityY -= (gravitySpeed * delta); //drops by (gravitySpeed * time elapsed)
-		hitBox.y += VelocityY;
-		sprite.setPosition(hitBox.x, hitBox.y);
-
-		timeSinceMovedLeft += delta;
-		timeSinceMovedRight += delta;
-		
-		if ((Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) && 
-				(Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) && dominantDirection == 0) {
-			if (this.timeSinceMovedLeft > this.timeSinceMovedRight) {
-				dominantDirection = 1;
-			}
-			if (this.timeSinceMovedRight > this.timeSinceMovedLeft) {
-				dominantDirection = 2;
-			}
-		} else if ((Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) && 
-				(Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)) && dominantDirection != 0) {
-			//empty, because there's still two inputs, but dominant direction has been set
-		} else {
-			//0 or 1 directions is pressed
-			dominantDirection = 0;
-		}
-	}
-
-	//draws the image
-	public void draw(SpriteBatch batch){
-		sprite.draw(batch);
+	public int getDominantDirection() {
+		return dominantDirection;
 	}
 }

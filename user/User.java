@@ -1,22 +1,35 @@
-package net.ocps.tchs.MDGame.user;
+package com.matthewgarrison.user;
 
 public class User {
 
-	public String playerName;
-	public Skin currentSkin;
-	public boolean adsShown;
-	public int currentDifficulty;
-	public int didYouCheat; //scans in what the file says, used in any if statements
-	
+	private String playerName;
+    private Skin currentSkin;
+	private int currentDifficulty;
+
 	public User() {
-		//currently blank constructor
 	}
-	
-	public void setInfo(String playerName, Skin currentSkin, boolean adsShown, int currentDifficulty, int didYouCheat) {
-		this.playerName = playerName;
-		this.currentSkin = currentSkin;
-		this.adsShown = adsShown;
-		this.currentDifficulty = currentDifficulty;
-		this.didYouCheat = didYouCheat;
+
+	public void setPlayerName(String name) {
+		this.playerName = name;
+	}
+
+	public String getPlayerName() {
+		return this.playerName;
+	}
+
+	public void setCurrentSkin(Skin newSkin) {
+		this.currentSkin = newSkin;
+	}
+
+	public Skin getCurrentSkin() {
+		return this.currentSkin;
+	}
+
+	public void setCurrentDifficulty(int newDiff) {
+		this.currentDifficulty = newDiff;
+	}
+
+	public int getCurrentDifficulty() {
+		return this.currentDifficulty;
 	}
 }

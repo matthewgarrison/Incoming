@@ -1,7 +1,7 @@
-package net.ocps.tchs.MDGame.screens;
+package com.matthewgarrison.screens;
 
-import net.ocps.tchs.MDGame.GameHandler;
-import net.ocps.tchs.MDGame.tools.TextureManager;
+import com.matthewgarrison.GameHandler;
+import com.matthewgarrison.tools.TextureManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -11,30 +11,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 public class MainMenuScreen implements Screen {
+	private GameHandler game;
+	private OrthographicCamera camera;
+	private SpriteBatch batch;
+	private float canActOnThisScreenTimer;
 
-	GameHandler myGame;
-	OrthographicCamera camera;
-	Vector3 touchPos;
-	SpriteBatch batch;
-		
-	public float canNowActOnThisScreenTimer;
-
-	//NOTE: things in the constructor we want created once, like objects. Things in show() we want recreated or reset
-		//every time the screen is viewed
-	//constructor (show is then called after this, by setScreen())
 	public MainMenuScreen(GameHandler g) {
-		this.myGame = g;
+		this.game = g;
 	}
 
-	//called by the setScreen() method
 	public void show() {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		camera.setToOrtho(false, GameHandler.getScreenWidth(), GameHandler.getScreenHeight());
 		batch = new SpriteBatch();
-		TextureManager.load(TextureManager.mainMenuScreen_value, myGame);
-		TextureManager.load(TextureManager.labels_value, myGame);
-			    
-		canNowActOnThisScreenTimer = 0;
+		canActOnThisScreenTimer = 0;
 	}
 
 	public void render(float delta) {
@@ -46,70 +36,59 @@ public class MainMenuScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(TextureManager.mainMenuScreen_texture, 0, 0);
-		switch (myGame.user.currentDifficulty) {
-		case 1:
-			batch.draw(TextureManager.Easy, 300, 280);
-			break;
-		case 2:
-			batch.draw(TextureManager.Medium, 309, 280);
-			break;
-		case 3:
-			batch.draw(TextureManager.Hard, 300, 280);
-			break;
+		batch.draw(TextureManager.textures[TextureManager.mainGameScreen], 0, 0);
+		switch (game.getUser().getCurrentDifficulty()) {
+			case 1:
+				batch.draw(TextureManager.textures[TextureManager.easy], 300, 280);
+				break;
+			case 2:
+				batch.draw(TextureManager.textures[TextureManager.medium], 309, 280);
+				break;
+			case 3:
+				batch.draw(TextureManager.textures[TextureManager.hard], 300, 280);
+				break;
 		}
 		batch.end();
 
-		if (canNowActOnThisScreenTimer > 0.15) {
+		if (canActOnThisScreenTimer <= 0.15) {
+			canActOnThisScreenTimer += delta;
+		} else {
 			for (int i = 0; i < 5; i++) {
 				if(Gdx.input.isTouched(i)){
-					touchPos = new Vector3(Gdx.input.getX(i), Gdx.input.getY(i), 0);
+					Vector3 touchPos = new Vector3(Gdx.input.getX(i), Gdx.input.getY(i), 0);
 					camera.unproject(touchPos);
-					//new game
 					if(touchPos.x > 313 && touchPos.x < 461 && touchPos.y > 155 && touchPos.y < 235){
-						myGame.setScreen(new MainGameScreen(myGame));
+						game.setScreen(new MainGameScreen(game));
 					}
-					//options menu
 					if(touchPos.x > 40 && touchPos.x < 216 && touchPos.y > 31 && touchPos.y < 84){
-						myGame.setScreen(new OptionsScreen(myGame));
+						game.setScreen(new OptionsScreen(game));
 					}
-					//leaderboards
 					if(touchPos.x > 447 && touchPos.x < 776 && touchPos.y > 36 && touchPos.y < 80){
-						myGame.setScreen(new LeaderboardsScreen(myGame));
+						game.setScreen(new LeaderboardsScreen(game));
 					}
 				}
 			}
-			//new game
 			if(Gdx.input.isKeyJustPressed(Keys.ENTER)){
-				myGame.setScreen(new MainGameScreen(myGame));
+				game.setScreen(new MainGameScreen(game));
 			}
-		} else {
-			canNowActOnThisScreenTimer += Gdx.graphics.getDeltaTime();
 		}
-		
+
 	}
 
 	public void resize(int width, int height) {
 	}
 
-	//called when you switch to another screen
 	public void hide() {
 		this.dispose();
 	}
 
-	//called when you open another app or go to the homescreen
 	public void pause() {
-
 	}
 
-	//return from the app from pause
 	public void resume() {
-
 	}
 
-	//IS NOT automatically called when the screen switches
 	public void dispose() {
 		batch.dispose();
-		TextureManager.dispose(TextureManager.mainMenuScreen_value);
 	}
 }
