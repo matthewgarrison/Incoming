@@ -49,7 +49,7 @@ public class MainGameScreen implements Screen {
 
 	public void show() {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, GameHandler.getScreenWidth(), GameHandler.getScreenHeight());
+		camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 
 		isPaused = false;

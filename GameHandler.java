@@ -21,17 +21,18 @@ public class GameHandler extends Game {
 	private Score[] scores;
 	private Skin defaultSkin;
 	private Skin sheepSkin;
-	private final static int screenWidth = 800, screenHeight = 480;
-	private static Random rand;
+	public final static int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 480;
+	public final static int DEFAULT_SKIN = 0, SHEEP_SKIN = 1, EASY = 1, MEDIUM = 2, HARD = 3;
+	public static Random rand;
 
 	public GameHandler() {
 
 	}
 
 	public void create() {
-		this.defaultSkin = new Skin("DefaultSkin", 0, true);
-		this.sheepSkin = new Skin("SheepSkin", 1, true);
-		this.user = new User();
+		this.defaultSkin = new Skin("DefaultSkin", DEFAULT_SKIN, true);
+		this.sheepSkin = new Skin("SheepSkin", SHEEP_SKIN, true);
+		this.user = new User(this.defaultSkin);
 
 		this.textNormalSelected = new BitmapFont(Gdx.files.internal("Fonts/normal2/a.fnt"),
 				Gdx.files.internal("Fonts/normal2/a.png"), false);
@@ -49,12 +50,14 @@ public class GameHandler extends Game {
 
 	// Used to switch all relevant variables to their settings in the sheep skin.
 	public void switchToSheepSkin() {
+		user.setCurrentSkin(this.sheepSkin);
 		MainGuy.switchToSheepSkin();
 		TextureManager.loadSkinTextures(this);
 	}
 
 	// Used to switch all relevant variables to their settings in default skin.
 	public void switchToDefaultSkin() {
+		user.setCurrentSkin(this.defaultSkin);
 		MainGuy.switchToDefaultSkin();
 		TextureManager.loadSkinTextures(this);
 	}
@@ -99,15 +102,4 @@ public class GameHandler extends Game {
 		return sheepSkin;
 	}
 
-	public static int getScreenWidth() {
-		return screenWidth;
-	}
-
-	public static int getScreenHeight() {
-		return screenHeight;
-	}
-
-	public static Random getRand() {
-		return rand;
-	}
 }

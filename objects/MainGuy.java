@@ -28,7 +28,7 @@ public class MainGuy {
 
 	public MainGuy(int x, int y) {
 		hitBox = new Rectangle(x, y, width, 77);
-		sprite = new Sprite(TextureManager.mainGuy_texture1Right);
+		sprite = new Sprite(TextureManager.textures[TextureManager.mainGuy1Right]);
 		setPosition(x, y);
 
 		speed = 200;
@@ -52,9 +52,9 @@ public class MainGuy {
 		inAir = false;
 
 		if (facingLeft) {
-			sprite.setTexture(TextureManager.mainGuy_texture3Left);
+			sprite.setTexture(TextureManager.textures[TextureManager.mainGuy3Left]);
 		} else {
-			sprite.setTexture(TextureManager.mainGuy_texture3Right);
+			sprite.setTexture(TextureManager.textures[TextureManager.mainGuy3Right]);
 		}
 	}
 
@@ -65,15 +65,15 @@ public class MainGuy {
 		// Cycles through 3 animations; if MainGuy's in air, it will turn the sprite the correct way.
 		facingLeft = true;
 		if (inAir) {
-			sprite.setTexture(TextureManager.mainGuy_textureJumpLeft);
+			sprite.setTexture(TextureManager.textures[TextureManager.mainGuyJumpLeft]);
 		} else {
 			animationCounter++;
 			if (animationCounter == 0) {
-				sprite.setTexture(TextureManager.mainGuy_texture1Left);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy1Left]);
 			} else if (animationCounter == 5) {
-				sprite.setTexture(TextureManager.mainGuy_texture2Left);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy2Left]);
 			} else if (animationCounter == 10) {
-				sprite.setTexture(TextureManager.mainGuy_texture3Left);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy3Left]);
 			} else if (animationCounter == 15){
 				animationCounter = 0;
 			}
@@ -87,15 +87,15 @@ public class MainGuy {
 		// Cycles through 3 animations; if MainGuy's in air, it will turn the sprite the correct way.
 		facingLeft = false;
 		if (inAir) {
-			sprite.setTexture(TextureManager.mainGuy_textureJumpRight);
+			sprite.setTexture(TextureManager.textures[TextureManager.mainGuyJumpRight]);
 		} else {
 			animationCounter++;
 			if (animationCounter == 0) {
-				sprite.setTexture(TextureManager.mainGuy_texture1Right);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy1Right]);
 			} else if (animationCounter == 5) {
-				sprite.setTexture(TextureManager.mainGuy_texture2Right);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy2Right]);
 			} else if (animationCounter == 10) {
-				sprite.setTexture(TextureManager.mainGuy_texture3Right);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy3Right]);
 			} else if (animationCounter == 15){
 				animationCounter = 0;
 			}
@@ -117,9 +117,9 @@ public class MainGuy {
 			velocityY = 10 + boost;
 
 			if (facingLeft) {
-				sprite.setTexture(TextureManager.mainGuy_textureJumpLeft);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuyJumpLeft]);
 			} else {
-				sprite.setTexture(TextureManager.mainGuy_textureJumpRight);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuyJumpRight]);
 			}
 		}
 	}
@@ -127,9 +127,9 @@ public class MainGuy {
 	public void crouch() {
 		if (!inAir) {
 			if (facingLeft){
-				sprite.setTexture(TextureManager.mainGuy_textureCrouchLeft);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuyCrouchLeft]);
 			} else {
-				sprite.setTexture(TextureManager.mainGuy_textureCrouchRight);
+				sprite.setTexture(TextureManager.textures[TextureManager.mainGuyCrouchRight]);
 			}
 			hitBox.height = crouchingHitboxHeight;
 		}

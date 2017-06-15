@@ -30,7 +30,7 @@ public class PowerUp {
 
 	public void reset() {
 		speed = 0;
-		setPosition(rand.nextInt(700) + 50, GameHandler.getScreenHeight());
+		setPosition(rand.nextInt(700) + 50, GameHandler.SCREEN_HEIGHT);
 	}
 
 	public Rectangle getHitBox() {

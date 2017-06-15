@@ -1,5 +1,6 @@
 package com.matthewgarrison.screens;
 
+import com.badlogic.gdx.Game;
 import com.matthewgarrison.GameHandler;
 import com.matthewgarrison.tools.TextureManager;
 import com.badlogic.gdx.Gdx;
@@ -22,7 +23,7 @@ public class MainMenuScreen implements Screen {
 
 	public void show() {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, GameHandler.getScreenWidth(), GameHandler.getScreenHeight());
+		camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		canActOnThisScreenTimer = 0;
 	}
@@ -36,18 +37,15 @@ public class MainMenuScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(TextureManager.textures[TextureManager.mainGameScreen], 0, 0);
-		switch (game.getUser().getCurrentDifficulty()) {
-			case 1:
-				batch.draw(TextureManager.textures[TextureManager.easy], 300, 280);
-				break;
-			case 2:
-				batch.draw(TextureManager.textures[TextureManager.medium], 309, 280);
-				break;
-			case 3:
-				batch.draw(TextureManager.textures[TextureManager.hard], 300, 280);
-				break;
+		batch.draw(TextureManager.textures[TextureManager.mainMenuScreen], 0, 0);
+		if (game.getUser().getCurrentDifficulty() == GameHandler.EASY) {
+			batch.draw(TextureManager.textures[TextureManager.easy], 300, 280);
+		} else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM) {
+			batch.draw(TextureManager.textures[TextureManager.medium], 309, 280);
+		} else {
+			batch.draw(TextureManager.textures[TextureManager.hard], 300, 280);
 		}
+
 		batch.end();
 
 		if (canActOnThisScreenTimer <= 0.15) {
@@ -68,7 +66,7 @@ public class MainMenuScreen implements Screen {
 					}
 				}
 			}
-			if(Gdx.input.isKeyJustPressed(Keys.ENTER)){
+			if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
 				game.setScreen(new MainGameScreen(game));
 			}
 		}

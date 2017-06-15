@@ -6,7 +6,10 @@ public class User {
     private Skin currentSkin;
 	private int currentDifficulty;
 
-	public User() {
+	public User(Skin defaultSkin) {
+		this.playerName = "Player";
+		this.currentSkin = defaultSkin;
+		this.currentDifficulty = 1;
 	}
 
 	public void setPlayerName(String name) {

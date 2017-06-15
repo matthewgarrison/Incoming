@@ -15,10 +15,7 @@ public class Modifier {
 	}
 
 	public boolean isDone() {
-		if (timeLeft <= 0 ) {
-			return true;
-		}
-		return false;
+		return (timeLeft <= 0);
 	}
 
 	public float getModifyingValue() {

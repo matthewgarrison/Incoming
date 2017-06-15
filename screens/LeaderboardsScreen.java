@@ -1,7 +1,7 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.tools.FileManager;
+import com.matthewgarrison.tools.PreferencesManager;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -25,9 +25,8 @@ public class LeaderboardsScreen implements Screen {
 
 	public void show() {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, GameHandler.getScreenWidth(), GameHandler.getScreenHeight());
+		camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		batch = new SpriteBatch();
-		TextureManager.loadAllGameTextures(game);
 		this.currentSkin = game.getUser().getCurrentSkin().getIdNumber();
 		this.currentDifficulty = game.getUser().getCurrentDifficulty();
 		canActOnThisScreenTimer = 0;
@@ -44,37 +43,30 @@ public class LeaderboardsScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(TextureManager.textures[TextureManager.leaderboardsScreen], 0, 0);
-		switch (currentSkin) {
-			case 1:
-				batch.draw(TextureManager.textures[TextureManager.darkNormal], 200, 200);
-				batch.draw(TextureManager.textures[TextureManager.sheep], 195, 140);
-				break;
-			case 2:
-				batch.draw(TextureManager.textures[TextureManager.darkSheep], 195, 140);
-				batch.draw(TextureManager.textures[TextureManager.normal], 200, 200);
-				break;
+		if (game.getUser().getCurrentDifficulty() == GameHandler.EASY) {
+			batch.draw(TextureManager.textures[TextureManager.darkEasy], 5, 320);
+			batch.draw(TextureManager.textures[TextureManager.medium], 175, 320);
+			batch.draw(TextureManager.textures[TextureManager.hard], 345, 320);
+		} else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM) {
+			batch.draw(TextureManager.textures[TextureManager.easy], 5, 320);
+			batch.draw(TextureManager.textures[TextureManager.darkMedium], 175, 320);
+			batch.draw(TextureManager.textures[TextureManager.hard], 345, 320);
+		} else {
+			batch.draw(TextureManager.textures[TextureManager.easy], 5, 320);
+			batch.draw(TextureManager.textures[TextureManager.medium], 175, 320);
+			batch.draw(TextureManager.textures[TextureManager.darkHard], 345, 320);
 		}
-		switch (currentDifficulty) {
-			case 1:
-				batch.draw(TextureManager.textures[TextureManager.darkEasy], 5, 320);
-				batch.draw(TextureManager.textures[TextureManager.medium], 175, 320);
-				batch.draw(TextureManager.textures[TextureManager.hard], 345, 320);
-				break;
-			case 2:
-				batch.draw(TextureManager.textures[TextureManager.easy], 5, 320);
-				batch.draw(TextureManager.textures[TextureManager.darkMedium], 175, 320);
-				batch.draw(TextureManager.textures[TextureManager.hard], 345, 320);
-				break;
-			case 3:
-				batch.draw(TextureManager.textures[TextureManager.easy], 5, 320);
-				batch.draw(TextureManager.textures[TextureManager.medium], 175, 320);
-				batch.draw(TextureManager.textures[TextureManager.darkHard], 345, 320);
-				break;
+		if (game.getUser().getCurrentSkin().getIdNumber() == GameHandler.DEFAULT_SKIN) {
+			batch.draw(TextureManager.textures[TextureManager.darkNormal], 200, 200);
+			batch.draw(TextureManager.textures[TextureManager.sheep], 195, 140);
+		} else {
+			batch.draw(TextureManager.textures[TextureManager.darkSheep], 195, 140);
+			batch.draw(TextureManager.textures[TextureManager.normal], 200, 200);
 		}
 
-		game.getTextLarge().draw(batch, "1. " + game.getScores()[0].toString(), 500, 350);
-		game.getTextLarge().draw(batch, "2. " + game.getScores()[1].toString(), 500, 275);
-		game.getTextLarge().draw(batch, "3. " + game.getScores()[2].toString(), 500, 200);
+		game.getTextLarge().draw(batch, "1. " + game.getScores()[0], 500, 350);
+		game.getTextLarge().draw(batch, "2. " + game.getScores()[1], 500, 275);
+		game.getTextLarge().draw(batch, "3. " + game.getScores()[2], 500, 200);
 		batch.end();
 
 		if (canActOnThisScreenTimer <= 0.15) {
@@ -123,14 +115,20 @@ public class LeaderboardsScreen implements Screen {
 
 	private void loadScores() {
 		String fileName = null;
-		if (currentDifficulty == 1 && currentSkin == 1) fileName = "MDGames/Incoming/Highscores/normalEasy.in";
-		else if (currentDifficulty == 2 && currentSkin == 1) fileName = "MDGames/Incoming/Highscores/normalMedium.in";
-		else if (currentDifficulty == 3 && currentSkin == 1) fileName = "MDGames/Incoming/Highscores/normalHard.in";
-		else if (currentDifficulty == 1 && currentSkin == 2) fileName = "MDGames/Incoming/Highscores/sheepEasy.in";
-		else if (currentDifficulty == 2 && currentSkin == 2) fileName = "MDGames/Incoming/Highscores/sheepMedium.in";
-		else if (currentDifficulty == 3 && currentSkin == 2) fileName = "MDGames/Incoming/Highscores/sheepHard.in";
+		if (currentDifficulty == GameHandler.EASY && currentSkin == GameHandler.DEFAULT_SKIN)
+			fileName = "MDGames/Incoming/Highscores/normalEasy.in";
+		else if (currentDifficulty == GameHandler.EASY && currentSkin == GameHandler.DEFAULT_SKIN)
+			fileName = "MDGames/Incoming/Highscores/normalMedium.in";
+		else if (currentDifficulty == GameHandler.MEDIUM && currentSkin == GameHandler.DEFAULT_SKIN)
+			fileName = "MDGames/Incoming/Highscores/normalHard.in";
+		else if (currentDifficulty == GameHandler.HARD && currentSkin == GameHandler.SHEEP_SKIN)
+			fileName = "MDGames/Incoming/Highscores/sheepEasy.in";
+		else if (currentDifficulty == GameHandler.MEDIUM && currentSkin == GameHandler.SHEEP_SKIN)
+			fileName = "MDGames/Incoming/Highscores/sheepMedium.in";
+		else if (currentDifficulty == GameHandler.HARD && currentSkin == GameHandler.SHEEP_SKIN)
+			fileName = "MDGames/Incoming/Highscores/sheepHard.in";
 
-		FileManager.loadHighscoreFile(fileName);
+		PreferencesManager.loadHighscoreFile(fileName);
 	}
 
 	public void resize(int width, int height) {

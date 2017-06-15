@@ -1,7 +1,7 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.tools.FileManager;
+import com.matthewgarrison.tools.PreferencesManager;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -13,20 +13,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 public class GameOverScreen implements Screen {
-	private GameHandler myGame;
+	private GameHandler game;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private float canActOnThisScreenTimer;
 	private int score;
 
 	public GameOverScreen (GameHandler g, int score) {
-		this.myGame = g;
+		this.game = g;
 		this.score = score;
 	}
 
 	public void show() {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, GameHandler.getScreenWidth(), GameHandler.getScreenHeight());
+		camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		canActOnThisScreenTimer = 0;
 		if (score != 0) addHighScoreToFile();
@@ -42,18 +42,14 @@ public class GameOverScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(TextureManager.textures[TextureManager.gameOverScreen], 0, 0);
-		switch (myGame.getUser().getCurrentDifficulty()) {
-			case 1:
-				batch.draw(TextureManager.textures[TextureManager.easy], 300, 280);
-				break;
-			case 2:
-				batch.draw(TextureManager.textures[TextureManager.easy], 309, 280);
-				break;
-			case 3:
-				batch.draw(TextureManager.textures[TextureManager.easy], 300, 280);
-				break;
+		if (game.getUser().getCurrentDifficulty() == GameHandler.EASY) {
+			batch.draw(TextureManager.textures[TextureManager.easy], 300, 280);
+		} else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM) {
+			batch.draw(TextureManager.textures[TextureManager.medium], 309, 280);
+		} else {
+			batch.draw(TextureManager.textures[TextureManager.hard], 300, 280);
 		}
-		myGame.getTextNormal().draw(batch, "Score: " + score, 300, 250);
+		game.getTextNormal().draw(batch, "Score: " + score, 300, 250);
 		batch.end();
 
 		if (canActOnThisScreenTimer <= 0.15) {
@@ -64,27 +60,27 @@ public class GameOverScreen implements Screen {
 					Vector3 touchPos = new Vector3(Gdx.input.getX(i), Gdx.input.getY(i), 0);
 					camera.unproject(touchPos);
 					if(touchPos.x > 6 && touchPos.x < 310 && touchPos.y > 140 && touchPos.y < 200){
-						myGame.setScreen(new MainGameScreen(myGame));
+						game.setScreen(new MainGameScreen(game));
 					}
 					if(touchPos.x > 440 && touchPos.x < 795 && touchPos.y > 140 && touchPos.y < 200){
-						myGame.setScreen(new MainMenuScreen(myGame));
+						game.setScreen(new MainMenuScreen(game));
 					}
 				}
 			}
 
 			if(Gdx.input.isKeyJustPressed(Keys.R)){
-				myGame.setScreen(new MainGameScreen(myGame));
+				game.setScreen(new MainGameScreen(game));
 			}
 			if(Gdx.input.isKeyJustPressed(Keys.BACKSPACE)){
-				myGame.setScreen(new MainMenuScreen(myGame));
+				game.setScreen(new MainMenuScreen(game));
 			}
 		}
 	}
 
 	private void addHighScoreToFile() {
-		FileManager.writeToFile("MDGames/Incoming/Highscores/" +
-				myGame.getUser().getCurrentSkin().getName() + "_" +
-				myGame.getUser().getCurrentDifficulty() + ".in", myGame.getUser().getPlayerName() +
+		PreferencesManager.writeToFile("MDGames/Incoming/Highscores/" +
+				game.getUser().getCurrentSkin().getName() + "_" +
+				game.getUser().getCurrentDifficulty() + ".in", game.getUser().getPlayerName() +
 				" " + score + " ", true);
 	}
 

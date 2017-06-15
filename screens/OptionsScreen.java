@@ -1,7 +1,7 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.tools.FileManager;
+import com.matthewgarrison.tools.PreferencesManager;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -24,7 +24,7 @@ public class OptionsScreen implements Screen {
 
 	public void show() {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, GameHandler.getScreenWidth(), GameHandler.getScreenHeight());
+		camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		canActOnThisScreenTimer = 0;
 	}
@@ -38,28 +38,22 @@ public class OptionsScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		switch (game.getUser().getCurrentDifficulty()) {
-			case 1:
-				batch.draw(TextureManager.textures[TextureManager.optionsScreenEasy], 0, 0);
-				break;
-			case 2:
-				batch.draw(TextureManager.textures[TextureManager.optionsScreenMedium], 0, 0);
-				break;
-			case 3:
-				batch.draw(TextureManager.textures[TextureManager.optionsScreenHard], 0, 0);
-				break;
+
+		if (game.getUser().getCurrentDifficulty() == GameHandler.EASY) {
+			batch.draw(TextureManager.textures[TextureManager.optionsScreenEasy], 0, 0);
+		} else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM) {
+			batch.draw(TextureManager.textures[TextureManager.optionsScreenMedium], 0, 0);
+		} else {
+			batch.draw(TextureManager.textures[TextureManager.optionsScreenHard], 0, 0);
+		}
+		if (game.getUser().getCurrentSkin().getIdNumber() == GameHandler.DEFAULT_SKIN) {
+			batch.draw(TextureManager.textures[TextureManager.sheep], 450, 210);
+			batch.draw(TextureManager.textures[TextureManager.darkNormal], 186, 210);
+		} else {
+			batch.draw(TextureManager.textures[TextureManager.darkSheep], 450, 210);
+			batch.draw(TextureManager.textures[TextureManager.normal], 186, 210);
 		}
 
-		switch (game.getUser().getCurrentSkin().getIdNumber()) {
-			case 1:
-				batch.draw(TextureManager.textures[TextureManager.sheep], 450, 210);
-				batch.draw(TextureManager.textures[TextureManager.darkNormal], 186, 210);
-				break;
-			case 2:
-				batch.draw(TextureManager.textures[TextureManager.darkSheep], 450, 210);
-				batch.draw(TextureManager.textures[TextureManager.normal], 186, 210);
-				break;
-		}
 		batch.end();
 
 		if (canActOnThisScreenTimer <= 0.15) {
@@ -75,26 +69,27 @@ public class OptionsScreen implements Screen {
 					}
 
 					if(touchPos.x < 291 && touchPos.x > 181 && touchPos.y > 276 && touchPos.y < 330) {
-						FileManager.writeToFile("MDGames/Incoming/difficulty.in", "1", false);
-						game.getUser().setCurrentDifficulty(1);
+						PreferencesManager.writeToFile("MDGames/Incoming/difficulty.in", "" +
+								GameHandler.EASY, false);
+						game.getUser().setCurrentDifficulty(GameHandler.EASY);
 					}
 					if(touchPos.x < 490 && touchPos.x > 321 && touchPos.y > 276 && touchPos.y < 330) {
-						FileManager.writeToFile("MDGames/Incoming/difficulty.in", "2", false);
-						game.getUser().setCurrentDifficulty(2);
+						PreferencesManager.writeToFile("MDGames/Incoming/difficulty.in", "" +
+								GameHandler.MEDIUM, false);
+						game.getUser().setCurrentDifficulty(GameHandler.MEDIUM);
 					}
 					if(touchPos.x < 629 && touchPos.x > 515 && touchPos.y > 276 && touchPos.y < 330) {
-						FileManager.writeToFile("MDGames/Incoming/difficulty.in", "3", false);
-						game.getUser().setCurrentDifficulty(3);
+						PreferencesManager.writeToFile("MDGames/Incoming/difficulty.in", "" +
+								GameHandler.HARD, false);
+						game.getUser().setCurrentDifficulty(GameHandler.HARD);
 					}
 
 					if (touchPos.x < 350 && touchPos.x > 186 && touchPos.y < 270 && touchPos.y > 210) {
-						FileManager.writeToFile("MDGames/Incoming/whichSkin.in", "1", false);
-						game.getUser().setCurrentSkin(game.getDefaultSkin());
+						PreferencesManager.writeToFile("MDGames/Incoming/whichSkin.in", "1", false);
 						game.switchToDefaultSkin();
 					}
 					if (touchPos.x < 614 && touchPos.x > 450 && touchPos.y < 270 && touchPos.y > 210) {
-						FileManager.writeToFile("MDGames/Incoming/whichSkin.in", "2", false);
-						game.getUser().setCurrentSkin(game.getSheepSkin());
+						PreferencesManager.writeToFile("MDGames/Incoming/whichSkin.in", "2", false);
 						game.switchToSheepSkin();
 					}
 				}

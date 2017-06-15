@@ -5,7 +5,6 @@ import com.matthewgarrison.GameHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-//for the images
 public class TextureManager {
 	public static Texture[] textures;
 
@@ -62,14 +61,15 @@ public class TextureManager {
 
 	public static void loadSkinTextures(GameHandler game) {
 		String skin = (game.getUser().getCurrentSkin().getIdNumber() ==
-				game.getDefaultSkin().getIdNumber() ? "NormalMode" : "SheepMode");
+				GameHandler.DEFAULT_SKIN ? "NormalMode" : "SheepMode");
 
 		textures[mainMenuScreen] = new Texture(Gdx.files.internal(skin + "/Screens/MainMenu.png"));
-		textures[mainGameScreen] = new Texture(Gdx.files.internal(skin + "/Screens/MainMenGame.png"));
+		textures[mainGameScreen] = new Texture(Gdx.files.internal(skin + "/Screens/MainGame.png"));
 		textures[gameOverScreen] = new Texture(Gdx.files.internal(skin + "/Screens/GameOver.png"));
 		textures[optionsScreenEasy] = new Texture(Gdx.files.internal(skin + "/Screens/OptionsEasy.png"));
 		textures[optionsScreenMedium] = new Texture(Gdx.files.internal(skin + "/Screens/OptionsMedium.png"));
 		textures[optionsScreenHard] = new Texture(Gdx.files.internal(skin + "/Screens/OptionsHard.png"));
+		textures[leaderboardsScreen] = new Texture(Gdx.files.internal(skin + "/Screens/Leaderboards.png"));
 		textures[mainGuy1Left] = new Texture(Gdx.files.internal(skin + "/MainGuy/1Left.png"));
 		textures[mainGuy2Left] = new Texture(Gdx.files.internal(skin + "/MainGuy/2Left.png"));
 		textures[mainGuy3Left] = new Texture(Gdx.files.internal(skin + "/MainGuy/3Left.png"));
