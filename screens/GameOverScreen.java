@@ -35,7 +35,7 @@ public class GameOverScreen implements Screen {
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			Gdx.app.exit();
 		}
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.setProjectionMatrix(camera.combined);
@@ -76,14 +76,20 @@ public class GameOverScreen implements Screen {
 		}
 	}
 
+	/*
+	 * Appends the new score to the previous list of high scores, writes all the scores to preferences
+	 * (so loadCurrentScores can access the new score), calls loadCurrentScores to sort them and keep
+	 * the top 3, then writes the top 3 scores to preferences.
+	 */
 	private void addHighScoreToPrefs() {
 		String key = "" + game.getUser().getCurrentDifficulty();
 		String newValue = game.getUser().getName() + " " + score + " ";
-		String currValue = game.getPrefs().getString(key);
+		String currValue = game.getPrefs().getString(key, GameHandler.DEFAULT_SCORES);
 		game.getPrefs().putString(key, currValue + newValue);
 		game.getPrefs().flush();
-		// This is used to ensure the scores array only stores the top 3 scores.
 		game.loadCurrentScores(game.getUser().getCurrentDifficulty());
+		game.getPrefs().putString(key, game.scoresToString());
+		game.getPrefs().flush();
 	}
 
 	public void resize(int width, int height) {

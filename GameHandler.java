@@ -12,7 +12,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class GameHandler extends Game {
@@ -93,15 +95,23 @@ public class GameHandler extends Game {
 
 	public void loadCurrentScores(int difficulty) {
 		String key = String.valueOf(difficulty);
-		String[] parts = prefs.getString(key, GameHandler.DEFAULT_SCORES).split("[: ]+");
+		String[] parts = prefs.getString(key, DEFAULT_SCORES).split("[: ]+");
 
 		// The scores array only stores the top 3 scores.
-		scores = new Score[3];
-		for (int i = 0, j = 0; j < 3; i += 2, j++) {
-			scores[j] = new Score(parts[i], Integer.parseInt(parts[i+1]));
+		ArrayList<Score> tempScores = new ArrayList<Score>();
+		for (int i = 0; i < parts.length; i += 2) {
+			tempScores.add(new Score(parts[i], Integer.parseInt(parts[i+1])));
 		}
-		Arrays.sort(scores);
-		System.out.println(Arrays.toString(scores));
+		scores = new Score[3];
+		for (int i = 0; i < 3; i++) {
+			scores[i] = tempScores.get(i);
+		}
+	}
+
+	public String scoresToString() {
+		String out = "";
+		for (Score s : scores) out += s + " ";
+		return out;
 	}
 
 	public Skin getDefaultSkin() {

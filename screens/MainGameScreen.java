@@ -20,7 +20,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool;
 
 public class MainGameScreen implements Screen {
-	private GameHandler myGame;
+	private GameHandler game;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 
@@ -44,7 +44,7 @@ public class MainGameScreen implements Screen {
 	private ArrayList<Modifier> scoreModifiers;
 
 	public MainGameScreen(GameHandler g) {
-		this.myGame = g;
+		this.game = g;
 	}
 
 	public void show() {
@@ -71,7 +71,7 @@ public class MainGameScreen implements Screen {
 		isScoreBeingModified = false;
 		scoreModifiers = new ArrayList<Modifier>();
 
-		switch (myGame.getUser().getCurrentDifficulty()) {
+		switch (game.getUser().getCurrentDifficulty()) {
 			case 1:
 				Projectile.setSpeedIncrease(10);
 				PowerUp.setSpawnChance(3);
@@ -108,26 +108,26 @@ public class MainGameScreen implements Screen {
 		batch.begin();
 		batch.draw(TextureManager.textures[TextureManager.mainGameScreen], 0, 0);
 
-		myGame.getTextNormal().draw(batch, "Score: " + score,  20, 460);
-		myGame.getTextNormal().draw(batch, "Lives: " + lives, 655, 460);
-		myGame.getTextNormalSelected().draw(batch, "jump Power : " + player.getJumpPower() + "%", 275, 460);
+		game.getTextNormal().draw(batch, "Score: " + score,  20, 460);
+		game.getTextNormal().draw(batch, "Lives: " + lives, 630, 460);
+		game.getTextNormalSelected().draw(batch, "jump Power : " + player.getJumpPower() + "%", 275, 460);
 		switch (currentScoreModifier) {
 			case 1:
 				break;
 			case 2:
-				myGame.getTextNormal().draw(batch, "Double Points! (" +
+				game.getTextNormal().draw(batch, "Double Points! (" +
 						(int)scoreModifiers.get(0).getTimeLeft() + " seconds remaining)", 150, 390);
 				break;
 			case 4:
-				myGame.getTextNormal().draw(batch, "Quadruple Points! (" +
+				game.getTextNormal().draw(batch, "Quadruple Points! (" +
 						(int)scoreModifiers.get(0).getTimeLeft() + " seconds remaining)", 160, 390);
 				break;
 			case 8:
-				myGame.getTextNormal().draw(batch, "Octuple Points! (" +
+				game.getTextNormal().draw(batch, "Octuple Points! (" +
 						(int)scoreModifiers.get(0).getTimeLeft() + " seconds remaining)", 155, 390);
 				break;
 			default:
-				myGame.getTextNormal().draw(batch, "Score is being multiplied by " +
+				game.getTextNormal().draw(batch, "Score is being multiplied by " +
 						currentScoreModifier + " (" + (int)scoreModifiers.get(0).getTimeLeft()
 						+ ")", 100, 390);
 				break;
@@ -148,37 +148,24 @@ public class MainGameScreen implements Screen {
 		if (isPaused) {
 			batch.draw(TextureManager.textures[TextureManager.onScreenPlayButton], 363, 0);
 			batch.draw(TextureManager.textures[TextureManager.pauseMenu], 130, 110);
-			switch (myGame.getUser().getCurrentDifficulty()) {
-				case 1:
-					batch.draw(TextureManager.textures[TextureManager.easy], 300, 230);
-					break;
-				case 2:
-					batch.draw(TextureManager.textures[TextureManager.medium], 309, 230);
-					break;
-				case 3:
-					batch.draw(TextureManager.textures[TextureManager.hard], 300, 230);
-					break;
-			}
+			if (game.getUser().getCurrentDifficulty() == GameHandler.EASY)
+				batch.draw(TextureManager.textures[TextureManager.easy], 300, 230);
+			else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM)
+				batch.draw(TextureManager.textures[TextureManager.medium], 309, 230);
+			else batch.draw(TextureManager.textures[TextureManager.hard], 300, 230);
 		} else {
 			batch.draw(TextureManager.textures[TextureManager.onScreenPauseButton], 363, 0);
 		}
 
 		// The count-down shown when the game starts and un-pauses.
 		if (onscreenTimer >= 0 && !isPaused){
-			switch ((int) onscreenTimer) {
-				case 3:
-					batch.draw(TextureManager.textures[TextureManager.gameStartUnPause3], 363, 203);
-					break;
-				case 2:
-					batch.draw(TextureManager.textures[TextureManager.gameStartUnPause2], 363, 203);
-					break;
-				case 1:
-					batch.draw(TextureManager.textures[TextureManager.gameStartUnPause1], 363, 203);
-					break;
-				case 0:
-					batch.draw(TextureManager.textures[TextureManager.gameStartUnPauseGo], 343, 203);
-					break;
-			}
+			if (onscreenTimer >= 3)
+				batch.draw(TextureManager.textures[TextureManager.gameStartUnPause3], 363, 203);
+			else if (onscreenTimer >= 2)
+				batch.draw(TextureManager.textures[TextureManager.gameStartUnPause2], 363, 203);
+			else if (onscreenTimer >= 1)
+				batch.draw(TextureManager.textures[TextureManager.gameStartUnPause1], 363, 203);
+			else batch.draw(TextureManager.textures[TextureManager.gameStartUnPauseGo], 343, 203);
 		}
 
 		batch.end();
@@ -198,7 +185,7 @@ public class MainGameScreen implements Screen {
 							Vector3 touchPos = new Vector3(Gdx.input.getX(i), Gdx.input.getY(i), 0);
 							camera.unproject(touchPos);
 							if(touchPos.x > 176 && touchPos.x < 373 && touchPos. y > 151 && touchPos.y < 201){
-								myGame.setScreen(new MainMenuScreen(myGame));
+								game.setScreen(new MainMenuScreen(game));
 							}
 							if(touchPos.x > 433 && touchPos.x < 633 && touchPos. y > 151 && touchPos.y < 201){
 								this.unPauseGame();
@@ -264,7 +251,7 @@ public class MainGameScreen implements Screen {
 							this.addNewProjectile();
 							lives--;
 							if (lives == 0) {
-								myGame.setScreen(new GameOverScreen(myGame, score));
+								game.setScreen(new GameOverScreen(game, score));
 							}
 						}
 					}
@@ -296,7 +283,7 @@ public class MainGameScreen implements Screen {
 						}
 					}
 					// Creates a new projectile if the last projectile in the array reaches the speed cap.
-					if (projectiles.get(projectiles.size()).getSpeed() >= Projectile.getSpeedCap()) {
+					if (projectiles.get(projectiles.size()-1).getSpeed() >= Projectile.getSpeedCap()) {
 						this.addNewProjectile();
 					}
 
@@ -311,11 +298,11 @@ public class MainGameScreen implements Screen {
 						player.setPosition(leftWall.getX() + leftWall.getWidth(), player.getHitBox().y);
 					}
 					if(player.getHitBox().overlaps(rightWall)) {
-						if (myGame.getUser().getCurrentSkin().getIdNumber() ==
-								myGame.getDefaultSkin().getIdNumber()) {
+						if (game.getUser().getCurrentSkin().getIdNumber() ==
+								game.getDefaultSkin().getIdNumber()) {
 							player.setPosition(758, player.getHitBox().y);
-						} else if (myGame.getUser().getCurrentSkin().getIdNumber() ==
-								myGame.getSheepSkin().getIdNumber()) {
+						} else if (game.getUser().getCurrentSkin().getIdNumber() ==
+								game.getSheepSkin().getIdNumber()) {
 							player.setPosition(720, player.getHitBox().y);
 						}
 					}
@@ -406,7 +393,6 @@ public class MainGameScreen implements Screen {
 
 	public void dispose() {
 		batch.dispose();
-		TextureManager.disposeAllGameTextures();
 	}
 }
 
