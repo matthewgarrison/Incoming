@@ -1,7 +1,6 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.tools.PreferencesManager;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -29,7 +28,7 @@ public class GameOverScreen implements Screen {
 		camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		canActOnThisScreenTimer = 0;
-		if (score != 0) addHighScoreToFile();
+		if (score != 0) addHighScoreToPrefs();
 	}
 
 	public void render(float delta) {
@@ -77,11 +76,14 @@ public class GameOverScreen implements Screen {
 		}
 	}
 
-	private void addHighScoreToFile() {
-		PreferencesManager.writeToFile("MDGames/Incoming/Highscores/" +
-				game.getUser().getCurrentSkin().getName() + "_" +
-				game.getUser().getCurrentDifficulty() + ".in", game.getUser().getPlayerName() +
-				" " + score + " ", true);
+	private void addHighScoreToPrefs() {
+		String key = "" + game.getUser().getCurrentDifficulty();
+		String newValue = game.getUser().getName() + " " + score + " ";
+		String currValue = game.getPrefs().getString(key);
+		game.getPrefs().putString(key, currValue + newValue);
+		game.getPrefs().flush();
+		// This is used to ensure the scores array only stores the top 3 scores.
+		game.loadCurrentScores(game.getUser().getCurrentDifficulty());
 	}
 
 	public void resize(int width, int height) {

@@ -1,5 +1,6 @@
 package com.matthewgarrison;
 
+import com.badlogic.gdx.Preferences;
 import com.matthewgarrison.objects.MainGuy;
 import com.matthewgarrison.objects.Score;
 import com.matthewgarrison.screens.SplashScreen;
@@ -23,8 +24,10 @@ public class GameHandler extends Game {
 	private Skin sheepSkin;
 	public final static int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 480;
 	public final static int DEFAULT_SKIN = 0, SHEEP_SKIN = 1, EASY = 1, MEDIUM = 2, HARD = 3;
+	public final static String DEFAULT_NAME = "Player";
+	public final static String DEFAULT_SCORES = "---: -1 ---: -1 ---: -1 ";
 	public static Random rand;
-
+	private static Preferences prefs;
 	public GameHandler() {
 
 	}
@@ -42,6 +45,8 @@ public class GameHandler extends Game {
 				Gdx.files.internal("Fonts/normal2/b.png"), false);
 		this.textLarge = new BitmapFont(Gdx.files.internal("Fonts/normal2/b.fnt"),
 				Gdx.files.internal("Fonts/normal2/b.png"), false);
+
+		prefs = Gdx.app.getPreferences("My preferences");
 
 		this.setScreen(new SplashScreen(this));
 
@@ -86,12 +91,17 @@ public class GameHandler extends Game {
 		return scores;
 	}
 
-	public void sortScores() {
-		Arrays.sort(this.scores);
-	}
+	public void loadCurrentScores(int difficulty) {
+		String key = String.valueOf(difficulty);
+		String[] parts = prefs.getString(key, GameHandler.DEFAULT_SCORES).split("[: ]+");
 
-	public void createScores(int size) {
-		this.scores = new Score[size];
+		// The scores array only stores the top 3 scores.
+		scores = new Score[3];
+		for (int i = 0, j = 0; j < 3; i += 2, j++) {
+			scores[j] = new Score(parts[i], Integer.parseInt(parts[i+1]));
+		}
+		Arrays.sort(scores);
+		System.out.println(Arrays.toString(scores));
 	}
 
 	public Skin getDefaultSkin() {
@@ -102,4 +112,7 @@ public class GameHandler extends Game {
 		return sheepSkin;
 	}
 
+	public Preferences getPrefs() {
+		return prefs;
+	}
 }

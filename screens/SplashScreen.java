@@ -1,12 +1,10 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.tools.PreferencesManager;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,9 +24,8 @@ public class SplashScreen implements Screen {
 		this.camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		this.batch = new SpriteBatch();
 		this.splashTimer = 0;
-		PreferencesManager.create(game);
 		TextureManager.loadAllGameTextures(game);
-		this.loadFiles();
+		this.loadPrefs();
 	}
 
 	public void render(float delta) {
@@ -46,32 +43,13 @@ public class SplashScreen implements Screen {
 		this.splashTimer += delta;
 	}
 
-	private void loadFiles() {
-		PreferencesManager.loadNonSecureFile("MDGames/Incoming/playerName.in");
-		FileHandle file = Gdx.files.external("MDGames/Incoming/playerName.in");
-		if (!file.exists()) file = Gdx.files.internal("SavedVariables/playerName.in");
-		String playerName = file.readString();
-		game.getUser().setPlayerName(playerName);
+	private void loadPrefs() {
+		game.getUser().setName(game.getPrefs().getString("name", "Player"));
+		game.getUser().setCurrentDifficulty(game.getPrefs().getInteger("difficulty", GameHandler.EASY));
 
-		PreferencesManager.loadFile("MDGames/Incoming/difficulty.in");
-		file = Gdx.files.external("MDGames/Incoming/difficulty.in");
-		if (!file.exists()) file = Gdx.files.internal("SavedVariables/difficulty.in");
-		int difficulty = Integer.parseInt(file.readString());
-		game.getUser().setCurrentDifficulty(difficulty);
-
-		PreferencesManager.loadSecureFile("MDGames/Incoming/whichSkin.in");
-		file = Gdx.files.local("MDGames/Incoming/whichSkin.in");
-		if (!file.exists()) file = Gdx.files.internal("SavedVariables/whichSkin.in");
-		int whichSkin = Integer.parseInt(file.readString());
+		int whichSkin = game.getPrefs().getInteger("skin", GameHandler.DEFAULT_SKIN);
 		if (whichSkin == game.getDefaultSkin().getIdNumber()) game.switchToDefaultSkin();
 		else game.switchToSheepSkin();
-
-		game.getUser().setCurrentSkin(game.getSheepSkin());
-
-		PreferencesManager.loadSecureFile("MDGames/Incoming/InAppPurchases/sheepSkin.in");
-		file = Gdx.files.local("MDGames/Incoming/InAppPurchases/sheepSkin.in");
-		if (!file.exists()) file = Gdx.files.internal("SavedVariables/sheepSkin.in");
-		game.getSheepSkin().setIsAvailable(Integer.parseInt(file.readString()) != 0);
 	}
 
 	public void resize(int width, int height) {

@@ -1,7 +1,6 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.tools.PreferencesManager;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -69,27 +68,29 @@ public class OptionsScreen implements Screen {
 					}
 
 					if(touchPos.x < 291 && touchPos.x > 181 && touchPos.y > 276 && touchPos.y < 330) {
-						PreferencesManager.writeToFile("MDGames/Incoming/difficulty.in", "" +
-								GameHandler.EASY, false);
+						game.getPrefs().putInteger("difficulty", GameHandler.EASY);
+						game.getPrefs().flush();
 						game.getUser().setCurrentDifficulty(GameHandler.EASY);
 					}
 					if(touchPos.x < 490 && touchPos.x > 321 && touchPos.y > 276 && touchPos.y < 330) {
-						PreferencesManager.writeToFile("MDGames/Incoming/difficulty.in", "" +
-								GameHandler.MEDIUM, false);
+						game.getPrefs().putInteger("difficulty", GameHandler.MEDIUM);
+						game.getPrefs().flush();
 						game.getUser().setCurrentDifficulty(GameHandler.MEDIUM);
 					}
 					if(touchPos.x < 629 && touchPos.x > 515 && touchPos.y > 276 && touchPos.y < 330) {
-						PreferencesManager.writeToFile("MDGames/Incoming/difficulty.in", "" +
-								GameHandler.HARD, false);
+						game.getPrefs().putInteger("difficulty", GameHandler.HARD);
 						game.getUser().setCurrentDifficulty(GameHandler.HARD);
+						game.getPrefs().flush();
 					}
 
 					if (touchPos.x < 350 && touchPos.x > 186 && touchPos.y < 270 && touchPos.y > 210) {
-						PreferencesManager.writeToFile("MDGames/Incoming/whichSkin.in", "1", false);
+						game.getPrefs().putInteger("skin", GameHandler.DEFAULT_SKIN);
+						game.getPrefs().flush();
 						game.switchToDefaultSkin();
 					}
 					if (touchPos.x < 614 && touchPos.x > 450 && touchPos.y < 270 && touchPos.y > 210) {
-						PreferencesManager.writeToFile("MDGames/Incoming/whichSkin.in", "2", false);
+						game.getPrefs().putInteger("skin", GameHandler.SHEEP_SKIN);
+						game.getPrefs().flush();
 						game.switchToSheepSkin();
 					}
 				}

@@ -1,23 +1,25 @@
 package com.matthewgarrison.user;
 
+import com.matthewgarrison.GameHandler;
+
 public class User {
 
-	private String playerName;
+	private String name;
     private Skin currentSkin;
 	private int currentDifficulty;
 
 	public User(Skin defaultSkin) {
-		this.playerName = "Player";
+		this.name = GameHandler.DEFAULT_NAME;
 		this.currentSkin = defaultSkin;
 		this.currentDifficulty = 1;
 	}
 
-	public void setPlayerName(String name) {
-		this.playerName = name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getPlayerName() {
-		return this.playerName;
+	public String getName() {
+		return this.name;
 	}
 
 	public void setCurrentSkin(Skin newSkin) {

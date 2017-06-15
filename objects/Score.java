@@ -29,6 +29,6 @@ public class Score implements Comparable<Score> {
     }
 
 	public String toString() {
-		return this.name + " " + this.value;
+		return this.name + ": " + this.value;
 	}
 }
