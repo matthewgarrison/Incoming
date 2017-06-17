@@ -2,6 +2,7 @@ package com.matthewgarrison.objects;
 
 import java.util.Random;
 
+import com.badlogic.gdx.Game;
 import com.matthewgarrison.GameHandler;
 import com.matthewgarrison.tools.TextureManager;
 
@@ -14,10 +15,8 @@ public class PowerUp {
 	private Sprite sprite;
 	private int speed;
 	private static int spawnChance = 1;
-	private Random rand;
 
 	public PowerUp(int textureID) {
-		rand = new Random();
 		hitBox = new Rectangle(0, 0, 50, 50);
 		sprite = new Sprite(TextureManager.textures[textureID]);
 		reset();
@@ -30,7 +29,7 @@ public class PowerUp {
 
 	public void reset() {
 		speed = 0;
-		setPosition(rand.nextInt(700) + 50, GameHandler.SCREEN_HEIGHT);
+		setPosition(GameHandler.rand.nextInt(700) + 50, GameHandler.SCREEN_HEIGHT);
 	}
 
 	public Rectangle getHitBox() {
@@ -38,9 +37,9 @@ public class PowerUp {
 	}
 
 	public void update(float delta){
-		int randomSpawn = rand.nextInt(7500 / spawnChance);
+		int randomSpawn = GameHandler.rand.nextInt(7500 / spawnChance);
 		// The powerup starts dropping.
-		if (randomSpawn == 100) speed = 140;
+		if (randomSpawn == 0) speed = 140;
 		hitBox.y -= delta * speed;
 		sprite.setPosition(hitBox.x, hitBox.y);
 	}

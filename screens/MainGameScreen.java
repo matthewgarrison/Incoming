@@ -30,6 +30,7 @@ public class MainGameScreen implements Screen {
 	private Rectangle floor, projectileResetPoint, leftWall, rightWall;
 
 	private int score, lives;
+	private final int MAX_LIVES = 99;
 
 	private MainGuy player;
 
@@ -42,6 +43,7 @@ public class MainGameScreen implements Screen {
 	private int currentScoreModifier;
 	private boolean isScoreBeingModified;
 	private ArrayList<Modifier> scoreModifiers;
+	private final int MAX_SCORE_MOD = 8;
 
 	public MainGameScreen(GameHandler g) {
 		this.game = g;
@@ -63,30 +65,28 @@ public class MainGameScreen implements Screen {
 		this.addNewProjectile();
 
 		extraLife = new PowerUp(TextureManager.powerUpExtraLife);
-		jumpBoost = new PowerUp(TextureManager.powerUpScoreMod);
-		scoreModifier = new PowerUp(TextureManager.powerUpJumpBoost);
+		jumpBoost = new PowerUp(TextureManager.powerUpJumpBoost);
+		scoreModifier = new PowerUp(TextureManager.powerUpScoreMod);
+
+
 
 		score = 0;
 		currentScoreModifier = 1;
 		isScoreBeingModified = false;
 		scoreModifiers = new ArrayList<Modifier>();
 
-		switch (game.getUser().getCurrentDifficulty()) {
-			case 1:
-				Projectile.setSpeedIncrease(10);
-				PowerUp.setSpawnChance(3);
-				lives = 5;
-				break;
-			case 2:
-				Projectile.setSpeedIncrease(20);
-				PowerUp.setSpawnChance(2);
-				lives = 3;
-				break;
-			case 3:
-				Projectile.setSpeedIncrease(30);
-				PowerUp.setSpawnChance(1);
-				lives = 1;
-				break;
+		if (game.getUser().getCurrentDifficulty() == GameHandler.EASY) {
+			Projectile.setSpeedIncrease(10);
+			PowerUp.setSpawnChance(3);
+			lives = 5;
+		} else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM) {
+			Projectile.setSpeedIncrease(20);
+			PowerUp.setSpawnChance(2);
+			lives = 3;
+		} else {
+			Projectile.setSpeedIncrease(30);
+			PowerUp.setSpawnChance(1);
+			lives = 1;
 		}
 
 		canActOnThisScreenTimer = 0;
@@ -109,28 +109,16 @@ public class MainGameScreen implements Screen {
 		batch.draw(TextureManager.textures[TextureManager.mainGameScreen], 0, 0);
 
 		game.getTextNormal().draw(batch, "Score: " + score,  20, 460);
-		game.getTextNormal().draw(batch, "Lives: " + lives, 630, 460);
-		game.getTextNormalSelected().draw(batch, "jump Power : " + player.getJumpPower() + "%", 275, 460);
-		switch (currentScoreModifier) {
-			case 1:
-				break;
-			case 2:
-				game.getTextNormal().draw(batch, "Double Points! (" +
-						(int)scoreModifiers.get(0).getTimeLeft() + " seconds remaining)", 150, 390);
-				break;
-			case 4:
-				game.getTextNormal().draw(batch, "Quadruple Points! (" +
-						(int)scoreModifiers.get(0).getTimeLeft() + " seconds remaining)", 160, 390);
-				break;
-			case 8:
-				game.getTextNormal().draw(batch, "Octuple Points! (" +
-						(int)scoreModifiers.get(0).getTimeLeft() + " seconds remaining)", 155, 390);
-				break;
-			default:
-				game.getTextNormal().draw(batch, "Score is being multiplied by " +
-						currentScoreModifier + " (" + (int)scoreModifiers.get(0).getTimeLeft()
-						+ ")", 100, 390);
-				break;
+		game.getTextNormal().draw(batch, "Lives: " + lives, 585, 460);
+		if (currentScoreModifier > 1 && player.getJumpPower() > MainGuy.MIN_JUMP) {
+			game.getTextNormal().draw(batch, "" + currentScoreModifier + "x Points! (" +
+					(int)scoreModifiers.get(0).getTimeLeft() + ")", 240, 390);
+			game.getTextNormal().draw(batch, "" + (10*player.getJumpPower()) + "% Jump!", 260, 460);
+		} else if (currentScoreModifier > 1) {
+			game.getTextNormal().draw(batch, "" + currentScoreModifier + "x Points! (" +
+					(int)scoreModifiers.get(0).getTimeLeft() + ")", 240, 460);
+		} else if (player.getJumpPower() > MainGuy.MIN_JUMP) {
+			game.getTextNormal().draw(batch, "" + (10*player.getJumpPower()) + "% Jump!", 260, 460);
 		}
 
 		player.draw(batch);
@@ -229,8 +217,8 @@ public class MainGameScreen implements Screen {
 					if (scoreModifiers.isEmpty()) isScoreBeingModified = false;
 					currentScoreModifier = 1;
 					if (isScoreBeingModified) {
-						for(int ii = 0; ii < scoreModifiers.size(); ii++){
-							currentScoreModifier *= scoreModifiers.get(ii).getModifyingValue();
+						for (Modifier m : scoreModifiers){
+							currentScoreModifier *= m.getModifyingValue();
 						}
 					}
 
@@ -258,13 +246,12 @@ public class MainGameScreen implements Screen {
 
 					// Player gets an extra life.
 					if(player.getHitBox().overlaps(extraLife.getHitBox())){
-						if (lives < 99) lives++;
+						if (lives + 1 < MAX_LIVES) lives++;
 						extraLife.reset();
 					}
 					// Player gets a jump boost.
 					if(player.getHitBox().overlaps(jumpBoost.getHitBox())){
-						player.setJumpPower(player.getJumpPower()+100);
-						player.setBoost(player.getBoost()+5);
+						player.addJumpBoost(5);
 						jumpBoost.reset();
 					}
 					// Player gets a score modifier.

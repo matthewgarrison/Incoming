@@ -22,7 +22,7 @@ public class MainGuy {
 	private final int DD_NOTSET = 0, DD_LEFT = 1, DD_RIGHT = 2;
 
 	private int jumpPower;
-	private int boost;
+	public final static int MAX_JUMP = 20, MIN_JUMP = 10;
 
 	private static int standingHitboxHeight, crouchingHitboxHeight, width;
 
@@ -37,8 +37,7 @@ public class MainGuy {
 		inAir = false;
 		facingLeft = false;
 		animationCounter = 0;
-		jumpPower = 100;
-		boost = 0;
+		jumpPower = 10;
 
 		timeSinceMovedLeft = 0;
 		timeSinceMovedRight = 0;
@@ -107,14 +106,11 @@ public class MainGuy {
 			inAir = true;
 
 			// The jump boost.
-			if (jumpPower > 100) {
-				jumpPower -= 20;
-			}
-			if (boost > 0) {
-				boost--;
+			if (jumpPower > 10) {
+				jumpPower--;
 			}
 
-			velocityY = 10 + boost;
+			velocityY = jumpPower;
 
 			if (facingLeft) {
 				sprite.setTexture(TextureManager.textures[TextureManager.mainGuyJumpLeft]);
@@ -178,6 +174,10 @@ public class MainGuy {
 		MainGuy.width = 42;
 	}
 
+	public void addJumpBoost(int addition) {
+		if (jumpPower + addition <= MAX_JUMP) jumpPower += addition;
+	}
+
 	public Rectangle getHitBox() {
 		return hitBox;
 	}
@@ -188,14 +188,6 @@ public class MainGuy {
 
 	public void setJumpPower(int jumpPower) {
 		this.jumpPower = jumpPower;
-	}
-
-	public int getBoost() {
-		return boost;
-	}
-
-	public void setBoost(int boost) {
-		this.boost = boost;
 	}
 
 	public int getDominantDirection() {
