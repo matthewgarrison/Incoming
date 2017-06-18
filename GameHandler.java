@@ -49,10 +49,10 @@ public class GameHandler extends Game {
 				Gdx.files.internal("Fonts/normal2/b.png"), false);
 
 		prefs = Gdx.app.getPreferences("My preferences");
+		
+		rand = new Random();
 
 		this.setScreen(new SplashScreen(this));
-
-		rand = new Random();
 	}
 
 	// Used to switch all relevant variables to their settings in the sheep skin.

@@ -67,13 +67,13 @@ public class MainGuy {
 			sprite.setTexture(TextureManager.textures[TextureManager.mainGuyJumpLeft]);
 		} else {
 			animationCounter++;
-			if (animationCounter == 0) {
+			if (animationCounter < 10) {
 				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy1Left]);
-			} else if (animationCounter == 5) {
+			} else if (animationCounter < 20) {
 				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy2Left]);
-			} else if (animationCounter == 10) {
+			} else if (animationCounter < 30) {
 				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy3Left]);
-			} else if (animationCounter == 15){
+			} else if (animationCounter < 40){
 				animationCounter = 0;
 			}
 		}
@@ -89,13 +89,13 @@ public class MainGuy {
 			sprite.setTexture(TextureManager.textures[TextureManager.mainGuyJumpRight]);
 		} else {
 			animationCounter++;
-			if (animationCounter == 0) {
+			if (animationCounter < 7) {
 				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy1Right]);
-			} else if (animationCounter == 5) {
+			} else if (animationCounter < 14) {
 				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy2Right]);
-			} else if (animationCounter == 10) {
+			} else if (animationCounter < 21) {
 				sprite.setTexture(TextureManager.textures[TextureManager.mainGuy3Right]);
-			} else if (animationCounter == 15){
+			} else if (animationCounter < 28) {
 				animationCounter = 0;
 			}
 		}

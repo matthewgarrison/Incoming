@@ -43,7 +43,6 @@ public class MainGameScreen implements Screen {
 	private int currentScoreModifier;
 	private boolean isScoreBeingModified;
 	private ArrayList<Modifier> scoreModifiers;
-	private final int MAX_SCORE_MOD = 8;
 
 	public MainGameScreen(GameHandler g) {
 		this.game = g;
@@ -67,8 +66,6 @@ public class MainGameScreen implements Screen {
 		extraLife = new PowerUp(TextureManager.powerUpExtraLife);
 		jumpBoost = new PowerUp(TextureManager.powerUpJumpBoost);
 		scoreModifier = new PowerUp(TextureManager.powerUpScoreMod);
-
-
 
 		score = 0;
 		currentScoreModifier = 1;

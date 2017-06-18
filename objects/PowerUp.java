@@ -1,8 +1,6 @@
 package com.matthewgarrison.objects;
 
-import java.util.Random;
 
-import com.badlogic.gdx.Game;
 import com.matthewgarrison.GameHandler;
 import com.matthewgarrison.tools.TextureManager;
 
