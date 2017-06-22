@@ -22,6 +22,7 @@ public class Projectile implements Poolable {
 		this.speed = 300;
 		speedIncrease = 5;
 	}
+
 	public void reconstructor() {
 		this.setPosition(900, GameHandler.rand.nextInt(70) + 150);
 		if (this.speed + speedIncrease <= speedCap) {

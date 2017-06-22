@@ -28,7 +28,7 @@ public class GameOverScreen implements Screen {
 		camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		canActOnThisScreenTimer = 0;
-		if (score != 0) addHighScoreToPrefs();
+		if (score != 0) game.addNewScore(game.getUser().getCurrentDifficulty(), game.getUser().getName(), score);
 	}
 
 	public void render(float delta) {
@@ -74,22 +74,6 @@ public class GameOverScreen implements Screen {
 				game.setScreen(new MainMenuScreen(game));
 			}
 		}
-	}
-
-	/*
-	 * Appends the new score to the previous list of high scores, writes all the scores to preferences
-	 * (so loadCurrentScores can access the new score), calls loadCurrentScores to sort them and keep
-	 * the top 3, then writes the top 3 scores to preferences.
-	 */
-	private void addHighScoreToPrefs() {
-		String key = "" + game.getUser().getCurrentDifficulty();
-		String newValue = game.getUser().getName() + " " + score + " ";
-		String currValue = game.getPrefs().getString(key, GameHandler.DEFAULT_SCORES);
-		game.getPrefs().putString(key, currValue + newValue);
-		game.getPrefs().flush();
-		game.loadCurrentScores(game.getUser().getCurrentDifficulty());
-		game.getPrefs().putString(key, game.scoresToString());
-		game.getPrefs().flush();
 	}
 
 	public void resize(int width, int height) {

@@ -31,7 +31,7 @@ public class LeaderboardsScreen implements Screen {
 		batch = new SpriteBatch();
 		this.currentDifficultyShown = game.getUser().getCurrentDifficulty();
 		canActOnThisScreenTimer = 0;
-		game.loadCurrentScores(currentDifficultyShown);
+		game.loadScores(currentDifficultyShown);
 	}
 
 	public void render(float delta) {
@@ -58,12 +58,12 @@ public class LeaderboardsScreen implements Screen {
 			batch.draw(TextureManager.textures[TextureManager.darkHard], 330, 260);
 		}
 
-		game.getTextLarge().draw(batch, "1. " + (game.getScores()[0].getValue() != -1 ?
-				game.getScores()[0]: ""), 500, 350);
-		game.getTextLarge().draw(batch, "2. " + (game.getScores()[1].getValue() != -1 ?
-				game.getScores()[1]: ""), 500, 275);
-		game.getTextLarge().draw(batch, "3. " + (game.getScores()[2].getValue() != -1 ?
-				game.getScores()[2]: ""), 500, 200);
+		game.getTextLarge().draw(batch, "1. " + (game.getScores().get(0).getValue() != -1 ?
+				game.getScores().get(0) : ""), 500, 350);
+		game.getTextLarge().draw(batch, "2. " + (game.getScores().get(1).getValue() != -1 ?
+				game.getScores().get(1) : ""), 500, 275);
+		game.getTextLarge().draw(batch, "3. " + (game.getScores().get(2).getValue() != -1 ?
+				game.getScores().get(2) : ""), 500, 200);
 		batch.end();
 
 		if (canActOnThisScreenTimer <= 0.15) {
@@ -96,7 +96,7 @@ public class LeaderboardsScreen implements Screen {
 					}
 				}
 			}
-			if (reloadScores) game.loadCurrentScores(currentDifficultyShown);
+			if (reloadScores) game.loadScores(currentDifficultyShown);
 		}
 	}
 

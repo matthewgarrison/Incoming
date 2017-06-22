@@ -1,6 +1,7 @@
 package com.matthewgarrison;
 
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.matthewgarrison.objects.MainGuy;
 import com.matthewgarrison.objects.Score;
 import com.matthewgarrison.screens.SplashScreen;
@@ -21,7 +22,7 @@ public class GameHandler extends Game {
 
 	private User user;
 	private BitmapFont textNormalSelected, textLargeSelected, textNormal, textLarge;
-	private Score[] scores;
+	private ArrayList<Score> scores;
 	private Skin defaultSkin;
 	private Skin sheepSkin;
 	public final static int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 480;
@@ -30,8 +31,8 @@ public class GameHandler extends Game {
 	public final static String DEFAULT_SCORES = "---: -1 ---: -1 ---: -1 ";
 	public static Random rand;
 	private static Preferences prefs;
-	public GameHandler() {
 
+	public GameHandler() {
 	}
 
 	public void create() {
@@ -48,9 +49,9 @@ public class GameHandler extends Game {
 		this.textLarge = new BitmapFont(Gdx.files.internal("Fonts/normal2/b.fnt"),
 				Gdx.files.internal("Fonts/normal2/b.png"), false);
 
-		prefs = Gdx.app.getPreferences("My preferences");
-		
+		prefs = Gdx.app.getPreferences("Incoming");
 		rand = new Random();
+		scores = new ArrayList<Score>();
 
 		this.setScreen(new SplashScreen(this));
 	}
@@ -89,23 +90,31 @@ public class GameHandler extends Game {
 		return textNormal;
 	}
 
-	public Score[] getScores() {
+	public ArrayList<Score> getScores() {
 		return scores;
 	}
 
-	public void loadCurrentScores(int difficulty) {
+	public void loadScores(int difficulty) {
 		String key = String.valueOf(difficulty);
 		String[] parts = prefs.getString(key, DEFAULT_SCORES).split("[: ]+");
 
-		// The scores array only stores the top 3 scores.
-		ArrayList<Score> tempScores = new ArrayList<Score>();
+		scores.clear();
 		for (int i = 0; i < parts.length; i += 2) {
-			tempScores.add(new Score(parts[i], Integer.parseInt(parts[i+1])));
+			scores.add(new Score(parts[i], Integer.parseInt(parts[i+1])));
 		}
-		scores = new Score[3];
-		for (int i = 0; i < 3; i++) {
-			scores[i] = tempScores.get(i);
-		}
+	}
+
+	public void addNewScore(int difficulty, String name, int score) {
+		String key = String.valueOf(difficulty);
+		loadScores(difficulty);
+		scores.add(new Score(name, score));
+		Collections.sort(scores);
+		scores.remove(3); // Remove the lowest score from the list.
+
+		StringBuilder sb = new StringBuilder();
+		for (Score s : scores) sb.append(s).append(" ");
+		prefs.putString(key, sb.toString());
+		prefs.flush();
 	}
 
 	public String scoresToString() {
