@@ -352,7 +352,7 @@ public class MainGameScreen implements Screen {
 	}
 
 	private void resetProjectile(Projectile p) {
-		boolean b = p.init();
+		boolean b = p.init(player.getStandingHitboxHeight() - 30);
 		if (b && !p.getReachedSpeedCap()) {
 			p.setReachedSpeedCap(true);
 			addNewProjectile();
@@ -361,7 +361,7 @@ public class MainGameScreen implements Screen {
 
 	private void addNewProjectile() {
 		Projectile p = new Projectile();
-		p.init();
+		p.init(player.getStandingHitboxHeight() - 30);
 		projectiles.add(p);
 	}
 

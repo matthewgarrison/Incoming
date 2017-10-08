@@ -195,4 +195,8 @@ public class MainGuy {
 	public DirectionEnum getDominantDirection() {
 		return dominantDirection;
 	}
+
+	public int getStandingHitboxHeight() {
+		return standingHitboxHeight;
+	}
 }

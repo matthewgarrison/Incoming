@@ -25,8 +25,8 @@ public class Projectile {
 	}
 
 	// Returns true if the projectile reached the speed cap.
-	public boolean init() {
-		this.setPosition(900, GameHandler.rand.nextInt(70) + 150);
+	public boolean init(int maxHeight) {
+		this.setPosition(900, GameHandler.rand.nextInt(maxHeight) + 150);
 		if (this.speed + speedIncrease <= speedCap) {
 			this.speed += speedIncrease;
 			return false;
