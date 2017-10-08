@@ -30,7 +30,6 @@ public class GameOverScreen implements Screen {
 		camera.setToOrtho(false, GameHandler.SCREEN_WIDTH, GameHandler.SCREEN_HEIGHT);
 		batch = new SpriteBatch();
 		canActOnThisScreenTimer = 0;
-		if (score != 0) game.addNewScore(game.getUser().getCurrentDifficulty(), game.getUser().getName(), score);
 	}
 
 	public void render(float delta) {

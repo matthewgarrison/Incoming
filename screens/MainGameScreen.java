@@ -368,6 +368,7 @@ public class MainGameScreen implements Screen {
 	}
 
 	public void hide() {
+		if (score != 0) game.addNewScore(game.getUser().getCurrentDifficulty(), game.getUser().getName(), score);
 		this.dispose();
 	}
 
