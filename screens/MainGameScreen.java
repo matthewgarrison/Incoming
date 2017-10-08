@@ -2,6 +2,7 @@ package com.matthewgarrison.screens;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.matthewgarrison.GameHandler;
 import com.matthewgarrison.enums.DifficultyEnum;
@@ -39,8 +40,7 @@ public class MainGameScreen implements Screen {
 	private MainGuy player;
 
 	private ArrayList<Projectile> projectiles;
-	private ArrayDeque<Projectile> projectilesToBeDeleted;
-	private ProjectilePool projectilePool;
+	private ArrayDeque<Projectile> projectilesToReset;
 
 	private PowerUp extraLife, jumpBoost, scoreModifier;
 
@@ -63,8 +63,7 @@ public class MainGameScreen implements Screen {
 
 		player = new MainGuy(1, 120);
 		this.projectiles = new ArrayList<Projectile>();
-		this.projectilesToBeDeleted = new ArrayDeque<Projectile>();
-		this.projectilePool = new ProjectilePool();
+		this.projectilesToReset = new ArrayDeque<Projectile>();
 		this.addNewProjectile();
 
 		extraLife = new PowerUp(TextureEnum.POWERUP_EXTRA_LIFE);
@@ -236,8 +235,7 @@ public class MainGameScreen implements Screen {
 					for (int ii = 0; ii < projectiles.size(); ii++) {
 						if (player.getHitBox().overlaps(projectiles.get(ii).getHitBox())) {
 							player.setPosition(0, 120);
-							projectilesToBeDeleted.add(projectiles.get(ii));
-							this.addNewProjectile();
+							projectilesToReset.add(projectiles.get(ii));
 							lives--;
 							if (lives == 0) {
 								game.setScreen(new GameOverScreen(game, score));
@@ -265,14 +263,9 @@ public class MainGameScreen implements Screen {
 					// Projectile reset (hitting the left wall).
 					for (int ii = 0; ii < projectiles.size(); ii++) {
 						if (projectiles.get(ii).getHitBox().overlaps(projectileResetPoint)) {
-							projectilesToBeDeleted.add(projectiles.get(ii));
-							this.addNewProjectile();
+							projectilesToReset.add(projectiles.get(ii));
 							score += currentScoreModifier;
 						}
-					}
-					// Creates a new projectile if the last projectile in the array reaches the speed cap.
-					if (projectiles.get(projectiles.size()-1).getSpeed() >= Projectile.getSpeedCap()) {
-						this.addNewProjectile();
 					}
 
 					if(jumpBoost.getHitBox().overlaps(floor)) jumpBoost.reset();
@@ -337,10 +330,9 @@ public class MainGameScreen implements Screen {
 						}
 					}
 
-					while (!projectilesToBeDeleted.isEmpty()) {
-						Projectile p = projectilesToBeDeleted.poll();
-						projectiles.remove(p);
-						projectilePool.free(p);
+					while (!projectilesToReset.isEmpty()) {
+						Projectile p = projectilesToReset.poll();
+						resetProjectile(p);
 					}
 				}
 			}
@@ -358,10 +350,18 @@ public class MainGameScreen implements Screen {
 		pauseClickTimer = 0;
 	}
 
+	private void resetProjectile(Projectile p) {
+		boolean b = p.init();
+		if (b && !p.getReachedSpeedCap()) {
+			p.setReachedSpeedCap(true);
+			addNewProjectile();
+		}
+	}
+
 	private void addNewProjectile() {
-		Projectile p = projectilePool.obtain();
-		p.reconstructor();
-		this.projectiles.add(p);
+		Projectile p = new Projectile();
+		p.init();
+		projectiles.add(p);
 	}
 
 	public void resize(int width, int height) {
@@ -379,11 +379,5 @@ public class MainGameScreen implements Screen {
 
 	public void dispose() {
 		batch.dispose();
-	}
-}
-
-class ProjectilePool extends Pool<Projectile> {
-	protected Projectile newObject() {
-		return new Projectile();
 	}
 }

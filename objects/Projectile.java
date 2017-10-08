@@ -6,13 +6,13 @@ import com.matthewgarrison.tools.TextureManager;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Pool.Poolable;
 import com.matthewgarrison.enums.TextureEnum;
 
-public class Projectile implements Poolable {
+public class Projectile {
 	private Rectangle hitBox;
 	private Sprite sprite;
 	private int speed;
+	private boolean reachedSpeedCap;
 	private static int speedIncrease;
 	private final static int speedCap = 460;
 
@@ -21,14 +21,16 @@ public class Projectile implements Poolable {
 		this.sprite = new Sprite(TextureManager.textures[TextureEnum.PROJECTILE.ordinal()]);
 		this.setPosition(0, 0);
 		this.speed = 300;
-		speedIncrease = 5;
+		this.reachedSpeedCap = false;
 	}
 
-	public void reconstructor() {
+	// Returns true if the projectile reached the speed cap.
+	public boolean init() {
 		this.setPosition(900, GameHandler.rand.nextInt(70) + 150);
 		if (this.speed + speedIncrease <= speedCap) {
 			this.speed += speedIncrease;
-		}
+			return false;
+		} else return true;
 	}
 
 	private void setPosition(float x, float y) {
@@ -58,11 +60,19 @@ public class Projectile implements Poolable {
 		speedIncrease = n;
 	}
 
-	public static int getSpeedCap() {
-		return speedCap;
+	public static int getSpeedIncrease() {
+		return speedIncrease;
 	}
 
 	public int getSpeed() {
 		return speed;
+	}
+
+	public boolean getReachedSpeedCap() {
+		return reachedSpeedCap;
+	}
+
+	public void setReachedSpeedCap(boolean b) {
+		reachedSpeedCap = b;
 	}
 }
