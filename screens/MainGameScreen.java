@@ -314,12 +314,12 @@ public class MainGameScreen implements Screen {
 							camera.unproject(touchPos);
 							if (touchPos.x < 100 && touchPos.y < 100){
 								if (player.getDominantDirection() != DirectionEnum.RIGHT) {
-									player.moveLeft(Gdx.graphics.getDeltaTime());
+									player.moveLeft(delta);
 								}
 							}
 							if (touchPos.x > 100 && touchPos.x < 200 && touchPos.y < 100) {
 								if (player.getDominantDirection() != DirectionEnum.LEFT) {
-									player.moveRight(Gdx.graphics.getDeltaTime());
+									player.moveRight(delta);
 								}
 							}
 							if(touchPos.x > 700 && touchPos.y < 100){
