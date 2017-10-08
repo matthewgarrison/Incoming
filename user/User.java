@@ -1,19 +1,19 @@
 package com.matthewgarrison.user;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.enums.Skin;
-import com.matthewgarrison.enums.Difficulty;
+import com.matthewgarrison.enums.SkinEnum;
+import com.matthewgarrison.enums.DifficultyEnum;
 
 public class User {
 
 	private String name;
-    private Skin currentSkin;
-	private Difficulty currentDifficulty;
+    private SkinEnum currentSkin;
+	private DifficultyEnum currentDifficulty;
 
 	public User() {
 		this.name = GameHandler.DEFAULT_NAME;
-		this.currentSkin = Skin.NORMAL;
-		this.currentDifficulty = Difficulty.EASY;
+		this.currentSkin = SkinEnum.NORMAL;
+		this.currentDifficulty = DifficultyEnum.EASY;
 	}
 
 	public void setName(String name) {
@@ -24,19 +24,19 @@ public class User {
 		return this.name;
 	}
 
-	public void setCurrentSkin(Skin newSkin) {
+	public void setCurrentSkin(SkinEnum newSkin) {
 		this.currentSkin = newSkin;
 	}
 
-	public Skin getCurrentSkin() {
+	public SkinEnum getCurrentSkin() {
 		return this.currentSkin;
 	}
 
-	public void setCurrentDifficulty(Difficulty newDiff) {
+	public void setCurrentDifficulty(DifficultyEnum newDiff) {
 		this.currentDifficulty = newDiff;
 	}
 
-	public Difficulty getCurrentDifficulty() {
+	public DifficultyEnum getCurrentDifficulty() {
 		return this.currentDifficulty;
 	}
 }

@@ -44,7 +44,7 @@ public class TextureManager {
 	}
 
 	public static void loadSkinTextures(GameHandler game) {
-		String skin = Skin.getSkinName(game.getUser().getCurrentSkin());
+		String skin = game.getUser().getCurrentSkin().name();
 
 		textures[TextureEnum.MAIN_MENU_SCREEN.ordinal()] = new Texture(Gdx.files.internal(skin + "/Screens/MainMenu.png"));
 		textures[TextureEnum.MAIN_GAME_SCREEN.ordinal()] = new Texture(Gdx.files.internal(skin + "/Screens/MainGame.png"));

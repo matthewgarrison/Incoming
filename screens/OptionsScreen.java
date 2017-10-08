@@ -1,8 +1,8 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.enums.Difficulty;
-import com.matthewgarrison.enums.Skin;
+import com.matthewgarrison.enums.DifficultyEnum;
+import com.matthewgarrison.enums.SkinEnum;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -41,14 +41,14 @@ public class OptionsScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
-		if (game.getUser().getCurrentDifficulty() == Difficulty.EASY) {
+		if (game.getUser().getCurrentDifficulty() == DifficultyEnum.EASY) {
 			batch.draw(TextureManager.textures[TextureEnum.OPTIONS_SCREEN_EASY.ordinal()], 0, 0);
-		} else if (game.getUser().getCurrentDifficulty() == Difficulty.MEDIUM) {
+		} else if (game.getUser().getCurrentDifficulty() == DifficultyEnum.MEDIUM) {
 			batch.draw(TextureManager.textures[TextureEnum.OPTIONS_SCREEN_MEDIUM.ordinal()], 0, 0);
 		} else {
 			batch.draw(TextureManager.textures[TextureEnum.OPTIONS_SCREEN_HARD.ordinal()], 0, 0);
 		}
-		if (game.getUser().getCurrentSkin() == Skin.NORMAL) {
+		if (game.getUser().getCurrentSkin() == SkinEnum.NORMAL) {
 			batch.draw(TextureManager.textures[TextureEnum.SHEEP.ordinal()], 450, 210);
 			batch.draw(TextureManager.textures[TextureEnum.NORMAL_SELECTED.ordinal()], 186, 210);
 		} else {
@@ -71,28 +71,28 @@ public class OptionsScreen implements Screen {
 					}
 
 					if(touchPos.x < 291 && touchPos.x > 181 && touchPos.y > 276 && touchPos.y < 330) {
-						game.getPrefs().putInteger("difficulty", Difficulty.toInteger(Difficulty.EASY));
+						game.getPrefs().putString("difficulty", DifficultyEnum.EASY.name());
 						game.getPrefs().flush();
-						game.getUser().setCurrentDifficulty(Difficulty.EASY);
+						game.getUser().setCurrentDifficulty(DifficultyEnum.EASY);
 					}
 					if(touchPos.x < 490 && touchPos.x > 321 && touchPos.y > 276 && touchPos.y < 330) {
-						game.getPrefs().putInteger("difficulty", Difficulty.toInteger(Difficulty.MEDIUM));
+						game.getPrefs().putString("difficulty", DifficultyEnum.MEDIUM.name());
 						game.getPrefs().flush();
-						game.getUser().setCurrentDifficulty(Difficulty.MEDIUM);
+						game.getUser().setCurrentDifficulty(DifficultyEnum.MEDIUM);
 					}
 					if(touchPos.x < 629 && touchPos.x > 515 && touchPos.y > 276 && touchPos.y < 330) {
-						game.getPrefs().putInteger("difficulty", Difficulty.toInteger(Difficulty.HARD));						game.getPrefs().flush();
+						game.getPrefs().putString("difficulty", DifficultyEnum.HARD.name());						game.getPrefs().flush();
 						game.getPrefs().flush();
-						game.getUser().setCurrentDifficulty(Difficulty.HARD);
+						game.getUser().setCurrentDifficulty(DifficultyEnum.HARD);
 					}
 
 					if (touchPos.x < 350 && touchPos.x > 186 && touchPos.y < 270 && touchPos.y > 210) {
-						game.getPrefs().putInteger("skin", Skin.toInteger(Skin.NORMAL));
+						game.getPrefs().putString("skin", SkinEnum.NORMAL.name());
 						game.getPrefs().flush();
 						game.switchToDefaultSkin();
 					}
 					if (touchPos.x < 614 && touchPos.x > 450 && touchPos.y < 270 && touchPos.y > 210) {
-						game.getPrefs().putInteger("skin", Skin.toInteger(Skin.SHEEP));
+						game.getPrefs().putString("skin", SkinEnum.SHEEP.name());
 						game.getPrefs().flush();
 						game.switchToSheepSkin();
 					}

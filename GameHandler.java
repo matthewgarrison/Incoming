@@ -2,8 +2,8 @@ package com.matthewgarrison;
 
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.StringBuilder;
-import com.matthewgarrison.enums.Difficulty;
-import com.matthewgarrison.enums.Skin;
+import com.matthewgarrison.enums.DifficultyEnum;
+import com.matthewgarrison.enums.SkinEnum;
 import com.matthewgarrison.objects.MainGuy;
 import com.matthewgarrison.objects.Score;
 import com.matthewgarrison.screens.SplashScreen;
@@ -53,14 +53,14 @@ public class GameHandler extends Game {
 
 	// Used to switch all relevant variables to their settings in the sheep skin.
 	public void switchToSheepSkin() {
-		user.setCurrentSkin(Skin.SHEEP);
+		user.setCurrentSkin(SkinEnum.SHEEP);
 		MainGuy.switchToSheepSkin();
 		TextureManager.loadSkinTextures(this);
 	}
 
 	// Used to switch all relevant variables to their settings in default skin.
 	public void switchToDefaultSkin() {
-		user.setCurrentSkin(Skin.NORMAL);
+		user.setCurrentSkin(SkinEnum.NORMAL);
 		MainGuy.switchToDefaultSkin();
 		TextureManager.loadSkinTextures(this);
 	}
@@ -89,9 +89,8 @@ public class GameHandler extends Game {
 		return scores;
 	}
 
-	public void loadScores(Difficulty difficulty) {
-		String key = Difficulty.getDifficultyName(difficulty);
-		String[] parts = prefs.getString(key, DEFAULT_SCORES).split("[: ]+");
+	public void loadScores(DifficultyEnum difficulty) {
+		String[] parts = prefs.getString(difficulty.name(), DEFAULT_SCORES).split("[: ]+");
 
 		scores.clear();
 		for (int i = 0; i < parts.length; i += 2) {
@@ -99,8 +98,7 @@ public class GameHandler extends Game {
 		}
 	}
 
-	public void addNewScore(Difficulty difficulty, String name, int score) {
-		String key = Difficulty.getDifficultyName(difficulty);
+	public void addNewScore(DifficultyEnum difficulty, String name, int score) {
 		loadScores(difficulty);
 		scores.add(new Score(name, score));
 		Collections.sort(scores);
@@ -108,7 +106,7 @@ public class GameHandler extends Game {
 
 		StringBuilder sb = new StringBuilder();
 		for (Score s : scores) sb.append(s).append(" ");
-		prefs.putString(key, sb.toString());
+		prefs.putString(difficulty.name(), sb.toString());
 		prefs.flush();
 	}
 

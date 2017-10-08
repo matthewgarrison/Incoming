@@ -1,7 +1,7 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.enums.Difficulty;
+import com.matthewgarrison.enums.DifficultyEnum;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -18,7 +18,7 @@ public class LeaderboardsScreen implements Screen {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private float canActOnThisScreenTimer;
-	private Difficulty currentDifficultyShown;
+	private DifficultyEnum currentDifficultyShown;
 
 	public LeaderboardsScreen(GameHandler g) {
 		this.game = g;
@@ -43,17 +43,17 @@ public class LeaderboardsScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(TextureManager.textures[TextureEnum.LEADERBOARDS_SCREEN.ordinal()], 0, 0);
-		if (currentDifficultyShown == Difficulty.EASY) {
+		if (currentDifficultyShown == DifficultyEnum.EASY) {
 			batch.draw(TextureManager.textures[TextureEnum.EASY_SELECTED.ordinal()], -10, 260);
 		} else {
 			batch.draw(TextureManager.textures[TextureEnum.EASY.ordinal()], -10, 260);
 		}
-		if (currentDifficultyShown == Difficulty.MEDIUM) {
+		if (currentDifficultyShown == DifficultyEnum.MEDIUM) {
 			batch.draw(TextureManager.textures[TextureEnum.MEDIUM_SELECTED.ordinal()], 160, 260);
 		} else {
 			batch.draw(TextureManager.textures[TextureEnum.MEDIUM.ordinal()], 160, 260);
 		}
-		if (currentDifficultyShown == Difficulty.HARD) {
+		if (currentDifficultyShown == DifficultyEnum.HARD) {
 			batch.draw(TextureManager.textures[TextureEnum.HARD_SELECTED.ordinal()], 330, 260);
 		} else {
 			batch.draw(TextureManager.textures[TextureEnum.HARD.ordinal()], 330, 260);
@@ -81,18 +81,18 @@ public class LeaderboardsScreen implements Screen {
 					}
 
 					if (touchPos.x < 155 && touchPos.x > -10 && touchPos.y > 260 && touchPos.y < 320
-							&& currentDifficultyShown != Difficulty.EASY) {
-						currentDifficultyShown = Difficulty.EASY;
+							&& currentDifficultyShown != DifficultyEnum.EASY) {
+						currentDifficultyShown = DifficultyEnum.EASY;
 						reloadScores = true;
 					}
 					if (touchPos.x < 325 && touchPos.x > 160 && touchPos.y > 260 && touchPos.y < 320
-							&& currentDifficultyShown != Difficulty.MEDIUM) {
-						currentDifficultyShown = Difficulty.MEDIUM;
+							&& currentDifficultyShown != DifficultyEnum.MEDIUM) {
+						currentDifficultyShown = DifficultyEnum.MEDIUM;
 						reloadScores = true;
 					}
 					if (touchPos.x < 495 && touchPos.x > 330 && touchPos.y > 260 && touchPos.y < 320
-							&& currentDifficultyShown != Difficulty.HARD) {
-						currentDifficultyShown = Difficulty.HARD;
+							&& currentDifficultyShown != DifficultyEnum.HARD) {
+						currentDifficultyShown = DifficultyEnum.HARD;
 						reloadScores = true;
 					}
 				}

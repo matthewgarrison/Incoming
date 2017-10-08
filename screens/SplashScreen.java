@@ -1,8 +1,8 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
-import com.matthewgarrison.enums.Difficulty;
-import com.matthewgarrison.enums.Skin;
+import com.matthewgarrison.enums.DifficultyEnum;
+import com.matthewgarrison.enums.SkinEnum;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -48,12 +48,13 @@ public class SplashScreen implements Screen {
 
 	private void loadPrefs() {
 		game.getUser().setName(game.getPrefs().getString("name", "Player"));
-		Difficulty diff = Difficulty.fromInteger(game.getPrefs().getInteger("difficulty",
-				Difficulty.toInteger(Difficulty.EASY)));
+		DifficultyEnum diff = DifficultyEnum.valueOf(game.getPrefs().getString("difficulty",
+				DifficultyEnum.EASY.name()));
 		game.getUser().setCurrentDifficulty(diff);
 
-		Skin whichSkin = Skin.fromInteger(game.getPrefs().getInteger("skin", Skin.toInteger(Skin.NORMAL)));
-		if (whichSkin == Skin.NORMAL) game.switchToDefaultSkin();
+		SkinEnum whichSkin = SkinEnum.valueOf(game.getPrefs().getString("skin",
+				SkinEnum.NORMAL.name()));
+		if (whichSkin == SkinEnum.NORMAL) game.switchToDefaultSkin();
 		else game.switchToSheepSkin();
 	}
 
