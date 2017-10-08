@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import com.matthewgarrison.GameHandler;
 import com.matthewgarrison.enums.DifficultyEnum;
+import com.matthewgarrison.enums.DirectionEnum;
 import com.matthewgarrison.enums.SkinEnum;
 import com.matthewgarrison.tools.TextureManager;
 import com.matthewgarrison.objects.Projectile;
@@ -287,12 +288,12 @@ public class MainGameScreen implements Screen {
 					}
 
 					if(Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) {
-						if (player.getDominantDirection() == 0 || player.getDominantDirection() == 1) {
+						if (player.getDominantDirection() != DirectionEnum.RIGHT) {
 							player.moveLeft(delta);
 						}
 					}
 					if(Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D)){
-						if (player.getDominantDirection() == 0 || player.getDominantDirection() == 1) {
+						if (player.getDominantDirection() !=  DirectionEnum.LEFT) {
 							player.moveRight(delta);
 						}
 					}
@@ -312,12 +313,12 @@ public class MainGameScreen implements Screen {
 							Vector3 touchPos = new Vector3(Gdx.input.getX(i), Gdx.input.getY(i), 0);
 							camera.unproject(touchPos);
 							if (touchPos.x < 100 && touchPos.y < 100){
-								if (player.getDominantDirection() == 0 || player.getDominantDirection() == 1) {
+								if (player.getDominantDirection() != DirectionEnum.RIGHT) {
 									player.moveLeft(Gdx.graphics.getDeltaTime());
 								}
 							}
 							if (touchPos.x > 100 && touchPos.x < 200 && touchPos.y < 100) {
-								if (player.getDominantDirection() == 0 || player.getDominantDirection() == 2) {
+								if (player.getDominantDirection() != DirectionEnum.LEFT) {
 									player.moveRight(Gdx.graphics.getDeltaTime());
 								}
 							}

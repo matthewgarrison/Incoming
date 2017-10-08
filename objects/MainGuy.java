@@ -1,5 +1,6 @@
 package com.matthewgarrison.objects;
 
+import com.matthewgarrison.enums.DirectionEnum;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -19,8 +20,8 @@ public class MainGuy {
 
 	private boolean facingLeft;
 	private float timeSinceMovedLeft, timeSinceMovedRight;
-	private int animationCounter, dominantDirection;
-	private final int DD_NOTSET = 0, DD_LEFT = 1, DD_RIGHT = 2;
+	private int animationCounter;
+	private DirectionEnum dominantDirection;
 
 	private int jumpPower;
 	public final static int MAX_JUMP = 20, MIN_JUMP = 10;
@@ -42,7 +43,7 @@ public class MainGuy {
 
 		timeSinceMovedLeft = 0;
 		timeSinceMovedRight = 0;
-		dominantDirection = DD_NOTSET;
+		dominantDirection = DirectionEnum.NOT_SET;
 	}
 
 	public void landOnGround(float y){
@@ -147,15 +148,15 @@ public class MainGuy {
 
 		if ((Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)) &&
 				(Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.D))) {
-			if (dominantDirection == DD_NOTSET) {
+			if (dominantDirection == DirectionEnum.NOT_SET) {
 				if (this.timeSinceMovedLeft > this.timeSinceMovedRight) {
-					dominantDirection = DD_LEFT;
+					dominantDirection = DirectionEnum.LEFT;
 				} else if (this.timeSinceMovedRight > this.timeSinceMovedLeft) {
-					dominantDirection = DD_RIGHT;
+					dominantDirection = DirectionEnum.RIGHT;
 				}
 			}
 		} else {
-			dominantDirection = DD_NOTSET;
+			dominantDirection = DirectionEnum.NOT_SET;
 		}
 	}
 
@@ -191,7 +192,7 @@ public class MainGuy {
 		this.jumpPower = jumpPower;
 	}
 
-	public int getDominantDirection() {
+	public DirectionEnum getDominantDirection() {
 		return dominantDirection;
 	}
 }
