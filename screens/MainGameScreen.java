@@ -1,5 +1,6 @@
 package com.matthewgarrison.screens;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import com.matthewgarrison.GameHandler;
@@ -38,7 +39,7 @@ public class MainGameScreen implements Screen {
 	private MainGuy player;
 
 	private ArrayList<Projectile> projectiles;
-	private ArrayList<Projectile> projectilesToBeDeleted;
+	private ArrayDeque<Projectile> projectilesToBeDeleted;
 	private ProjectilePool projectilePool;
 
 	private PowerUp extraLife, jumpBoost, scoreModifier;
@@ -62,7 +63,7 @@ public class MainGameScreen implements Screen {
 
 		player = new MainGuy(1, 120);
 		this.projectiles = new ArrayList<Projectile>();
-		this.projectilesToBeDeleted = new ArrayList<Projectile>();
+		this.projectilesToBeDeleted = new ArrayDeque<Projectile>();
 		this.projectilePool = new ProjectilePool();
 		this.addNewProjectile();
 
@@ -336,10 +337,10 @@ public class MainGameScreen implements Screen {
 						}
 					}
 
-					while (projectilesToBeDeleted.size() > 0) {
-						projectiles.remove(projectilesToBeDeleted.get(0));
-						projectilePool.free(projectilesToBeDeleted.get(0));
-						projectilesToBeDeleted.remove(0);
+					while (!projectilesToBeDeleted.isEmpty()) {
+						Projectile p = projectilesToBeDeleted.poll();
+						projectiles.remove(p);
+						projectilePool.free(p);
 					}
 				}
 			}
