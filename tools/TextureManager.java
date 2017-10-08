@@ -4,6 +4,7 @@ import com.matthewgarrison.GameHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.matthewgarrison.enums.Skin;
 
 public class TextureManager {
 	public static Texture[] textures;
@@ -60,8 +61,7 @@ public class TextureManager {
 	}
 
 	public static void loadSkinTextures(GameHandler game) {
-		String skin = (game.getUser().getCurrentSkin().getIdNumber() ==
-				GameHandler.DEFAULT_SKIN ? "NormalMode" : "SheepMode");
+		String skin = Skin.getSkinName(game.getUser().getCurrentSkin());
 
 		textures[mainMenuScreen] = new Texture(Gdx.files.internal(skin + "/Screens/MainMenu.png"));
 		textures[mainGameScreen] = new Texture(Gdx.files.internal(skin + "/Screens/MainGame.png"));

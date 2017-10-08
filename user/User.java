@@ -1,17 +1,19 @@
 package com.matthewgarrison.user;
 
 import com.matthewgarrison.GameHandler;
+import com.matthewgarrison.enums.Skin;
+import com.matthewgarrison.enums.Difficulty;
 
 public class User {
 
 	private String name;
     private Skin currentSkin;
-	private int currentDifficulty;
+	private Difficulty currentDifficulty;
 
-	public User(Skin defaultSkin) {
+	public User() {
 		this.name = GameHandler.DEFAULT_NAME;
-		this.currentSkin = defaultSkin;
-		this.currentDifficulty = 1;
+		this.currentSkin = Skin.NORMAL;
+		this.currentDifficulty = Difficulty.EASY;
 	}
 
 	public void setName(String name) {
@@ -30,11 +32,11 @@ public class User {
 		return this.currentSkin;
 	}
 
-	public void setCurrentDifficulty(int newDiff) {
+	public void setCurrentDifficulty(Difficulty newDiff) {
 		this.currentDifficulty = newDiff;
 	}
 
-	public int getCurrentDifficulty() {
+	public Difficulty getCurrentDifficulty() {
 		return this.currentDifficulty;
 	}
 }

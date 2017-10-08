@@ -1,6 +1,7 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
+import com.matthewgarrison.enums.Difficulty;
 import com.matthewgarrison.objects.Score;
 import com.matthewgarrison.tools.TextureManager;
 
@@ -19,7 +20,7 @@ public class LeaderboardsScreen implements Screen {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private float canActOnThisScreenTimer;
-	private int currentDifficultyShown;
+	private Difficulty currentDifficultyShown;
 
 	public LeaderboardsScreen(GameHandler g) {
 		this.game = g;
@@ -44,11 +45,11 @@ public class LeaderboardsScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(TextureManager.textures[TextureManager.leaderboardsScreen], 0, 0);
-		if (currentDifficultyShown == GameHandler.EASY) {
+		if (currentDifficultyShown == Difficulty.EASY) {
 			batch.draw(TextureManager.textures[TextureManager.darkEasy], -10, 260);
 			batch.draw(TextureManager.textures[TextureManager.medium], 160, 260);
 			batch.draw(TextureManager.textures[TextureManager.hard], 330, 260);
-		} else if (currentDifficultyShown == GameHandler.MEDIUM) {
+		} else if (currentDifficultyShown == Difficulty.MEDIUM) {
 			batch.draw(TextureManager.textures[TextureManager.easy], -10, 260);
 			batch.draw(TextureManager.textures[TextureManager.darkMedium], 160, 260);
 			batch.draw(TextureManager.textures[TextureManager.hard], 330, 260);
@@ -80,18 +81,18 @@ public class LeaderboardsScreen implements Screen {
 					}
 
 					if (touchPos.x < 155 && touchPos.x > -10 && touchPos.y > 260 && touchPos.y < 320
-							&& currentDifficultyShown != 1) {
-						currentDifficultyShown = 1;
+							&& currentDifficultyShown != Difficulty.EASY) {
+						currentDifficultyShown = Difficulty.EASY;
 						reloadScores = true;
 					}
 					if (touchPos.x < 325 && touchPos.x > 160 && touchPos.y > 260 && touchPos.y < 320
-							&& currentDifficultyShown != 2) {
-						currentDifficultyShown = 2;
+							&& currentDifficultyShown != Difficulty.MEDIUM) {
+						currentDifficultyShown = Difficulty.MEDIUM;
 						reloadScores = true;
 					}
 					if (touchPos.x < 495 && touchPos.x > 330 && touchPos.y > 260 && touchPos.y < 320
-							&& currentDifficultyShown != 3) {
-						currentDifficultyShown = 3;
+							&& currentDifficultyShown != Difficulty.HARD) {
+						currentDifficultyShown = Difficulty.HARD;
 						reloadScores = true;
 					}
 				}

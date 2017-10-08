@@ -2,6 +2,7 @@ package com.matthewgarrison.screens;
 
 import com.badlogic.gdx.Game;
 import com.matthewgarrison.GameHandler;
+import com.matthewgarrison.enums.Difficulty;
 import com.matthewgarrison.tools.TextureManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -38,9 +39,9 @@ public class MainMenuScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(TextureManager.textures[TextureManager.mainMenuScreen], 0, 0);
-		if (game.getUser().getCurrentDifficulty() == GameHandler.EASY) {
+		if (game.getUser().getCurrentDifficulty() == Difficulty.EASY) {
 			batch.draw(TextureManager.textures[TextureManager.easy], 300, 280);
-		} else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM) {
+		} else if (game.getUser().getCurrentDifficulty() == Difficulty.MEDIUM) {
 			batch.draw(TextureManager.textures[TextureManager.medium], 309, 280);
 		} else {
 			batch.draw(TextureManager.textures[TextureManager.hard], 300, 280);

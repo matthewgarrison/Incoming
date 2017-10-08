@@ -3,6 +3,8 @@ package com.matthewgarrison.screens;
 import java.util.ArrayList;
 
 import com.matthewgarrison.GameHandler;
+import com.matthewgarrison.enums.Difficulty;
+import com.matthewgarrison.enums.Skin;
 import com.matthewgarrison.tools.TextureManager;
 import com.matthewgarrison.objects.Projectile;
 import com.matthewgarrison.objects.MainGuy;
@@ -72,11 +74,11 @@ public class MainGameScreen implements Screen {
 		isScoreBeingModified = false;
 		scoreModifiers = new ArrayList<Modifier>();
 
-		if (game.getUser().getCurrentDifficulty() == GameHandler.EASY) {
+		if (game.getUser().getCurrentDifficulty() == Difficulty.EASY) {
 			Projectile.setSpeedIncrease(10);
 			PowerUp.setSpawnChance(3);
 			lives = 5;
-		} else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM) {
+		} else if (game.getUser().getCurrentDifficulty() == Difficulty.MEDIUM) {
 			Projectile.setSpeedIncrease(20);
 			PowerUp.setSpawnChance(2);
 			lives = 3;
@@ -133,9 +135,9 @@ public class MainGameScreen implements Screen {
 		if (isPaused) {
 			batch.draw(TextureManager.textures[TextureManager.onScreenPlayButton], 363, 0);
 			batch.draw(TextureManager.textures[TextureManager.pauseMenu], 130, 110);
-			if (game.getUser().getCurrentDifficulty() == GameHandler.EASY)
+			if (game.getUser().getCurrentDifficulty() == Difficulty.EASY)
 				batch.draw(TextureManager.textures[TextureManager.easy], 300, 230);
-			else if (game.getUser().getCurrentDifficulty() == GameHandler.MEDIUM)
+			else if (game.getUser().getCurrentDifficulty() == Difficulty.MEDIUM)
 				batch.draw(TextureManager.textures[TextureManager.medium], 309, 230);
 			else batch.draw(TextureManager.textures[TextureManager.hard], 300, 230);
 		} else {
@@ -282,11 +284,9 @@ public class MainGameScreen implements Screen {
 						player.setPosition(leftWall.getX() + leftWall.getWidth(), player.getHitBox().y);
 					}
 					if(player.getHitBox().overlaps(rightWall)) {
-						if (game.getUser().getCurrentSkin().getIdNumber() ==
-								game.getDefaultSkin().getIdNumber()) {
+						if (game.getUser().getCurrentSkin() == Skin.NORMAL) {
 							player.setPosition(758, player.getHitBox().y);
-						} else if (game.getUser().getCurrentSkin().getIdNumber() ==
-								game.getSheepSkin().getIdNumber()) {
+						} else if (game.getUser().getCurrentSkin() == Skin.SHEEP) {
 							player.setPosition(720, player.getHitBox().y);
 						}
 					}

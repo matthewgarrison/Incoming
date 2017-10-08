@@ -1,6 +1,8 @@
 package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
+import com.matthewgarrison.enums.Difficulty;
+import com.matthewgarrison.enums.Skin;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -45,10 +47,12 @@ public class SplashScreen implements Screen {
 
 	private void loadPrefs() {
 		game.getUser().setName(game.getPrefs().getString("name", "Player"));
-		game.getUser().setCurrentDifficulty(game.getPrefs().getInteger("difficulty", GameHandler.EASY));
+		Difficulty diff = Difficulty.fromInteger(game.getPrefs().getInteger("difficulty",
+				Difficulty.toInteger(Difficulty.EASY)));
+		game.getUser().setCurrentDifficulty(diff);
 
-		int whichSkin = game.getPrefs().getInteger("skin", GameHandler.DEFAULT_SKIN);
-		if (whichSkin == game.getDefaultSkin().getIdNumber()) game.switchToDefaultSkin();
+		Skin whichSkin = Skin.fromInteger(game.getPrefs().getInteger("skin", Skin.toInteger(Skin.NORMAL)));
+		if (whichSkin == Skin.NORMAL) game.switchToDefaultSkin();
 		else game.switchToSheepSkin();
 	}
 
