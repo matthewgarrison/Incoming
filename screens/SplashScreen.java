@@ -10,6 +10,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.matthewgarrison.enums.TextureEnum;
 
 public class SplashScreen implements Screen {
 	private GameHandler game;
@@ -36,7 +37,7 @@ public class SplashScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(TextureManager.textures[TextureManager.splashScreen], 0, 0);
+		batch.draw(TextureManager.textures[TextureEnum.SPLASH_SCREEN.ordinal()], 0, 0);
 		batch.end();
 
 		if (this.splashTimer >= 1.5) {

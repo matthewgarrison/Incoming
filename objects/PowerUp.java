@@ -7,6 +7,7 @@ import com.matthewgarrison.tools.TextureManager;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.matthewgarrison.enums.TextureEnum;
 
 public class PowerUp {
 	private Rectangle hitBox;
@@ -14,9 +15,9 @@ public class PowerUp {
 	private int speed;
 	private static int spawnChance = 1;
 
-	public PowerUp(int textureID) {
+	public PowerUp(TextureEnum texture) {
 		hitBox = new Rectangle(0, 0, 50, 50);
-		sprite = new Sprite(TextureManager.textures[textureID]);
+		sprite = new Sprite(TextureManager.textures[texture.ordinal()]);
 		reset();
 	}
 

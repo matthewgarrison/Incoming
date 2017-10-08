@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.matthewgarrison.enums.TextureEnum;
 
 public class OptionsScreen implements Screen {
 	private GameHandler game;
@@ -41,18 +42,18 @@ public class OptionsScreen implements Screen {
 		batch.begin();
 
 		if (game.getUser().getCurrentDifficulty() == Difficulty.EASY) {
-			batch.draw(TextureManager.textures[TextureManager.optionsScreenEasy], 0, 0);
+			batch.draw(TextureManager.textures[TextureEnum.OPTIONS_SCREEN_EASY.ordinal()], 0, 0);
 		} else if (game.getUser().getCurrentDifficulty() == Difficulty.MEDIUM) {
-			batch.draw(TextureManager.textures[TextureManager.optionsScreenMedium], 0, 0);
+			batch.draw(TextureManager.textures[TextureEnum.OPTIONS_SCREEN_MEDIUM.ordinal()], 0, 0);
 		} else {
-			batch.draw(TextureManager.textures[TextureManager.optionsScreenHard], 0, 0);
+			batch.draw(TextureManager.textures[TextureEnum.OPTIONS_SCREEN_HARD.ordinal()], 0, 0);
 		}
 		if (game.getUser().getCurrentSkin() == Skin.NORMAL) {
-			batch.draw(TextureManager.textures[TextureManager.sheep], 450, 210);
-			batch.draw(TextureManager.textures[TextureManager.darkNormal], 186, 210);
+			batch.draw(TextureManager.textures[TextureEnum.SHEEP.ordinal()], 450, 210);
+			batch.draw(TextureManager.textures[TextureEnum.NORMAL_SELECTED.ordinal()], 186, 210);
 		} else {
-			batch.draw(TextureManager.textures[TextureManager.darkSheep], 450, 210);
-			batch.draw(TextureManager.textures[TextureManager.normal], 186, 210);
+			batch.draw(TextureManager.textures[TextureEnum.SHEEP_SELECTED.ordinal()], 450, 210);
+			batch.draw(TextureManager.textures[TextureEnum.NORMAL.ordinal()], 186, 210);
 		}
 
 		batch.end();

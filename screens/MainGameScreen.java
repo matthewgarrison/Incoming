@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Pool;
+import com.matthewgarrison.enums.TextureEnum;
 
 public class MainGameScreen implements Screen {
 	private GameHandler game;
@@ -65,9 +66,9 @@ public class MainGameScreen implements Screen {
 		this.projectilePool = new ProjectilePool();
 		this.addNewProjectile();
 
-		extraLife = new PowerUp(TextureManager.powerUpExtraLife);
-		jumpBoost = new PowerUp(TextureManager.powerUpJumpBoost);
-		scoreModifier = new PowerUp(TextureManager.powerUpScoreMod);
+		extraLife = new PowerUp(TextureEnum.POWERUP_EXTRA_LIFE);
+		jumpBoost = new PowerUp(TextureEnum.POWERUP_JUMP_BOOST);
+		scoreModifier = new PowerUp(TextureEnum.POWERUP_SCORE_MOD);
 
 		score = 0;
 		currentScoreModifier = 1;
@@ -105,7 +106,7 @@ public class MainGameScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(TextureManager.textures[TextureManager.mainGameScreen], 0, 0);
+		batch.draw(TextureManager.textures[TextureEnum.MAIN_GAME_SCREEN.ordinal()], 0, 0);
 
 		game.getTextNormal().draw(batch, "Score: " + score,  20, 460);
 		game.getTextNormal().draw(batch, "Lives: " + lives, 585, 460);
@@ -128,31 +129,31 @@ public class MainGameScreen implements Screen {
 		jumpBoost.draw(batch);
 		scoreModifier.draw(batch);
 
-		batch.draw(TextureManager.textures[TextureManager.onScreenLeftButton], 0, 0);
-		batch.draw(TextureManager.textures[TextureManager.onScreenRightButton], 100, 0);
-		batch.draw(TextureManager.textures[TextureManager.onScreenUpButton], 700, 0);
-		batch.draw(TextureManager.textures[TextureManager.onScreenDownButton], 600, 0);
+		batch.draw(TextureManager.textures[TextureEnum.ONSCREEN_LEFT_BUTTON.ordinal()], 0, 0);
+		batch.draw(TextureManager.textures[TextureEnum.ONSCREEN_RIGHT_BUTTON.ordinal()], 100, 0);
+		batch.draw(TextureManager.textures[TextureEnum.ONSCREEN_UP_BUTTON.ordinal()], 700, 0);
+		batch.draw(TextureManager.textures[TextureEnum.ONSCREEN_DOWN_BUTTON.ordinal()], 600, 0);
 		if (isPaused) {
-			batch.draw(TextureManager.textures[TextureManager.onScreenPlayButton], 363, 0);
-			batch.draw(TextureManager.textures[TextureManager.pauseMenu], 130, 110);
+			batch.draw(TextureManager.textures[TextureEnum.ONSCREEN_PLAY_BUTTON.ordinal()], 363, 0);
+			batch.draw(TextureManager.textures[TextureEnum.PAUSE_MENU.ordinal()], 130, 110);
 			if (game.getUser().getCurrentDifficulty() == Difficulty.EASY)
-				batch.draw(TextureManager.textures[TextureManager.easy], 300, 230);
+				batch.draw(TextureManager.textures[TextureEnum.EASY.ordinal()], 300, 230);
 			else if (game.getUser().getCurrentDifficulty() == Difficulty.MEDIUM)
-				batch.draw(TextureManager.textures[TextureManager.medium], 309, 230);
-			else batch.draw(TextureManager.textures[TextureManager.hard], 300, 230);
+				batch.draw(TextureManager.textures[TextureEnum.MEDIUM.ordinal()], 309, 230);
+			else batch.draw(TextureManager.textures[TextureEnum.HARD.ordinal()], 300, 230);
 		} else {
-			batch.draw(TextureManager.textures[TextureManager.onScreenPauseButton], 363, 0);
+			batch.draw(TextureManager.textures[TextureEnum.ONSCREEN_PAUSE_BUTTON.ordinal()], 363, 0);
 		}
 
 		// The count-down shown when the game starts and un-pauses.
 		if (onscreenTimer >= 0 && !isPaused){
 			if (onscreenTimer >= 3)
-				batch.draw(TextureManager.textures[TextureManager.gameStartUnPause3], 363, 203);
+				batch.draw(TextureManager.textures[TextureEnum.GAME_START_UNPAUSE_3.ordinal()], 363, 203);
 			else if (onscreenTimer >= 2)
-				batch.draw(TextureManager.textures[TextureManager.gameStartUnPause2], 363, 203);
+				batch.draw(TextureManager.textures[TextureEnum.GAME_START_UNPAUSE_2.ordinal()], 363, 203);
 			else if (onscreenTimer >= 1)
-				batch.draw(TextureManager.textures[TextureManager.gameStartUnPause1], 363, 203);
-			else batch.draw(TextureManager.textures[TextureManager.gameStartUnPauseGo], 343, 203);
+				batch.draw(TextureManager.textures[TextureEnum.GAME_START_UNPAUSE_1.ordinal()], 363, 203);
+			else batch.draw(TextureManager.textures[TextureEnum.GAME_START_UNPAUSE_GO.ordinal()], 343, 203);
 		}
 
 		batch.end();

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Pool.Poolable;
+import com.matthewgarrison.enums.TextureEnum;
 
 public class Projectile implements Poolable {
 	private Rectangle hitBox;
@@ -17,7 +18,7 @@ public class Projectile implements Poolable {
 
 	public Projectile() {
 		this.hitBox = new Rectangle(0, 0, 75, 25);
-		this.sprite = new Sprite(TextureManager.textures[TextureManager.projectile]);
+		this.sprite = new Sprite(TextureManager.textures[TextureEnum.PROJECTILE.ordinal()]);
 		this.setPosition(0, 0);
 		this.speed = 300;
 		speedIncrease = 5;

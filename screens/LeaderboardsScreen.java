@@ -2,7 +2,6 @@ package com.matthewgarrison.screens;
 
 import com.matthewgarrison.GameHandler;
 import com.matthewgarrison.enums.Difficulty;
-import com.matthewgarrison.objects.Score;
 import com.matthewgarrison.tools.TextureManager;
 
 import com.badlogic.gdx.Gdx;
@@ -12,8 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-
-import java.util.Arrays;
+import com.matthewgarrison.enums.TextureEnum;
 
 public class LeaderboardsScreen implements Screen {
 	private GameHandler game;
@@ -44,19 +42,21 @@ public class LeaderboardsScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(TextureManager.textures[TextureManager.leaderboardsScreen], 0, 0);
+		batch.draw(TextureManager.textures[TextureEnum.LEADERBOARDS_SCREEN.ordinal()], 0, 0);
 		if (currentDifficultyShown == Difficulty.EASY) {
-			batch.draw(TextureManager.textures[TextureManager.darkEasy], -10, 260);
-			batch.draw(TextureManager.textures[TextureManager.medium], 160, 260);
-			batch.draw(TextureManager.textures[TextureManager.hard], 330, 260);
-		} else if (currentDifficultyShown == Difficulty.MEDIUM) {
-			batch.draw(TextureManager.textures[TextureManager.easy], -10, 260);
-			batch.draw(TextureManager.textures[TextureManager.darkMedium], 160, 260);
-			batch.draw(TextureManager.textures[TextureManager.hard], 330, 260);
+			batch.draw(TextureManager.textures[TextureEnum.EASY_SELECTED.ordinal()], -10, 260);
 		} else {
-			batch.draw(TextureManager.textures[TextureManager.easy], -10, 260);
-			batch.draw(TextureManager.textures[TextureManager.medium], 160, 260);
-			batch.draw(TextureManager.textures[TextureManager.darkHard], 330, 260);
+			batch.draw(TextureManager.textures[TextureEnum.EASY.ordinal()], -10, 260);
+		}
+		if (currentDifficultyShown == Difficulty.MEDIUM) {
+			batch.draw(TextureManager.textures[TextureEnum.MEDIUM_SELECTED.ordinal()], 160, 260);
+		} else {
+			batch.draw(TextureManager.textures[TextureEnum.MEDIUM.ordinal()], 160, 260);
+		}
+		if (currentDifficultyShown == Difficulty.HARD) {
+			batch.draw(TextureManager.textures[TextureEnum.HARD_SELECTED.ordinal()], 330, 260);
+		} else {
+			batch.draw(TextureManager.textures[TextureEnum.HARD.ordinal()], 330, 260);
 		}
 
 		game.getTextLarge().draw(batch, "1. " + (game.getScores().get(0).getValue() != -1 ?

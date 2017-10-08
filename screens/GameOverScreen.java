@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.matthewgarrison.enums.TextureEnum;
 
 public class GameOverScreen implements Screen {
 	private GameHandler game;
@@ -41,13 +42,13 @@ public class GameOverScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(TextureManager.textures[TextureManager.gameOverScreen], 0, 0);
+		batch.draw(TextureManager.textures[TextureEnum.GAME_OVER_SCREEN.ordinal()], 0, 0);
 		if (game.getUser().getCurrentDifficulty() == Difficulty.EASY) {
-			batch.draw(TextureManager.textures[TextureManager.easy], 300, 280);
+			batch.draw(TextureManager.textures[TextureEnum.EASY.ordinal()], 300, 280);
 		} else if (game.getUser().getCurrentDifficulty() == Difficulty.MEDIUM) {
-			batch.draw(TextureManager.textures[TextureManager.medium], 309, 280);
+			batch.draw(TextureManager.textures[TextureEnum.MEDIUM.ordinal()], 309, 280);
 		} else {
-			batch.draw(TextureManager.textures[TextureManager.hard], 300, 280);
+			batch.draw(TextureManager.textures[TextureEnum.HARD.ordinal()], 300, 280);
 		}
 		game.getTextNormal().draw(batch, "Score: " + score, 300, 250);
 		batch.end();
